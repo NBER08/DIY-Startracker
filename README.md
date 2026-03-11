@@ -8,7 +8,7 @@ An autonomous LoRa-controlled star tracker for astrophotography, built around a 
 - **Silent sidereal tracking** — TMC2209 stepper drivers with microstepping; near-zero vibration during exposures
 - **Wireless control** — LoRa (868 MHz EU) remote from phone or companion board; no cables touching the tracker mid-session
 - **IMU-assisted alignment refinement** — ICM-42688-P gyroscope detects polar axis wobble for software drift alignment
-- **Compact & field-ready** — 12V input (standard astro battery), 3D-printed PETG/ASA body, ⅜"-16 tripod mount
+- **Compact & field-ready** — 6V input, 3D-printed PETG body, tripod mount
 
 ## Hardware Summary
 
