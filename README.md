@@ -15,12 +15,13 @@ An autonomous LoRa-controlled star tracker for astrophotography, built around a 
 | Subsystem | Part |
 |---|---|
 | MCU | ESP32-S3-WROOM-2 |
-| Stepper drivers | TMC2209,  |
-| IMU | ICM-42688-P (SPI) |
-| GPS | ATGM336H / L76K module |
-| Magnetometer | QMC5883L (I²C) |
-| LoRa | Ra-01S (SX1276, 868 MHz) |
-| Power input | 12V DC, buck-converted to 3.3V logic |
+| Stepper drivers | TMC2209, two TB6612FNG |
+| IMU | BNO085 |
+| GPS | NEO-M8N module |
+| Magnetometer | IISMDCTR |
+| Power sense sensor| two INA219 |
+| LoRa | WLR089U (868 MHz) |
+| Power input | 6V DC from a UPS battery |
 
 ## Description
 
@@ -30,7 +31,9 @@ An autonomous LoRa-controlled star tracker for astrophotography, built around a 
 
 ### PCB
 
-
+The PCB was made by me in KICAD 9. 
+The main goal of the PCB is to precisely drive the motors to achieve the needed precision (especially the polar tracker motor)
+It also includes sensors for orientation, and measuring battery voltage and current and a LoRa module for remote communication and a connector for external modules.
 
 ### Mechanical
 
