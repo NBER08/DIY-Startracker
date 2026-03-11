@@ -14,59 +14,31 @@ An autonomous LoRa-controlled star tracker for astrophotography, built around a 
 
 | Subsystem | Part |
 |---|---|
-| MCU | ESP32-S3-MINI-1 |
-| Stepper drivers | TMC2209 (×3, UART mode) |
+| MCU | ESP32-S3-WROOM-2 |
+| Stepper drivers | TMC2209,  |
 | IMU | ICM-42688-P (SPI) |
 | GPS | ATGM336H / L76K module |
 | Magnetometer | QMC5883L (I²C) |
 | LoRa | Ra-01S (SX1276, 868 MHz) |
 | Power input | 12V DC, buck-converted to 3.3V logic |
 
-## Repository Layout
-
-```
-startracker/
-├── firmware/          # PlatformIO ESP32-S3 project
-│   ├── src/           # Application source (.cpp)
-│   ├── include/       # Shared headers
-│   └── lib/           # Vendored / local libraries
-├── hardware/          # KiCad 9 PCB project
-│   └── startracker/
-├── mechanical/        # 3D printable parts
-│   ├── printed-parts/ # STL exports (print-ready)
-│   └── cad-source/    # FreeCAD / STEP source files
-├── companion-app/     # LoRa remote control application
-├── docs/              # Design notes, datasheets, calibration guides
-└── scripts/           # Python utility scripts (astro math, calibration)
-```
-
-## Getting Started
+## Description
 
 ### Firmware
 
-Requires [PlatformIO](https://platformio.org/) (VS Code extension recommended).
 
-```bash
-cd firmware
-pio run                  # Build
-pio run -t upload        # Flash via USB
-pio device monitor       # Serial console (115200 baud)
-```
 
-### Hardware
+### PCB
 
-Open `hardware/startracker/startracker.kicad_pro` in KiCad 9.
+
 
 ### Mechanical
 
-STL files in `mechanical/printed-parts/` are print-ready. Recommended settings:
-- Material: PETG or ASA (cold-weather stability)
-- Layer height: 0.15 mm for gear surfaces, 0.20 mm elsewhere
-- Infill: 40%+ for structural parts, 20% for covers
+
 
 ## Critical Research Items (Pre-Build Checklist)
 
-See [`docs/RESEARCH_CHECKLIST.md`](docs/RESEARCH_CHECKLIST.md) for the six items that must be validated before finalising the design.
+
 
 ## License
 
