@@ -3910,6 +3910,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 123.19) (xy 231.14 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c7e9b55c-4664-46d5-8571-dcb55c2f8715")
+	)
+	(wire
+		(pts
 			(xy 135.89 176.53) (xy 135.89 177.8)
 		)
 		(stroke
@@ -3927,6 +3937,16 @@
 			(type default)
 		)
 		(uuid "cd986917-7f10-40e5-b69c-4299cf21b899")
+	)
+	(wire
+		(pts
+			(xy 224.79 125.73) (xy 231.14 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cdae363e-a6a3-4da6-a7ef-405cfc637028")
 	)
 	(wire
 		(pts
@@ -4312,6 +4332,17 @@
 		)
 		(uuid "bc281d16-3649-4315-b11f-a31b9fb57ddf")
 	)
+	(hierarchical_label "BNO2_SCL"
+		(shape input)
+		(at 224.79 123.19 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cb325690-387a-4e46-bf93-4c93e7f96a30")
+	)
 	(hierarchical_label "RXD"
 		(shape input)
 		(at 207.01 138.43 180)
@@ -4333,6 +4364,17 @@
 			(justify right)
 		)
 		(uuid "e80abbdd-6009-405f-ad45-0dbc380d4e75")
+	)
+	(hierarchical_label "BNO2_SDA"
+		(shape input)
+		(at 224.79 125.73 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f73e5543-ccf1-4bd4-a3a9-f4f74745932e")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -4464,6 +4506,74 @@
 			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
 					(reference "#PWR0102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 231.14 128.27 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "03a22f8f-71c6-4d97-b16f-b5932424217f")
+		(property "Reference" "#PWR079"
+			(at 224.79 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 227.33 128.2699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 231.14 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 231.14 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 231.14 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "13511a6b-bb3c-4ce2-a0e6-34b0f6d74fe9")
+		)
+		(instances
+			(project "Startracker"
+				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
+					(reference "#PWR079")
 					(unit 1)
 				)
 			)
@@ -4732,6 +4842,82 @@
 			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
 					(reference "#PWR048")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x04_Socket")
+		(at 236.22 123.19 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1c29bd24-58e3-49ae-8465-dcb8d3832d7f")
+		(property "Reference" "J9"
+			(at 237.49 123.1899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GPS"
+			(at 237.49 125.7299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical"
+			(at 236.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 236.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 236.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "6f10fcc7-752c-4b71-8366-c7e898f1a7bc")
+		)
+		(pin "3"
+			(uuid "bbe54947-7626-43ca-a25f-4ff4d2ddaed2")
+		)
+		(pin "2"
+			(uuid "e2d31e83-3042-4f32-a2c6-1ef49a34d585")
+		)
+		(pin "1"
+			(uuid "510e73ce-e70b-496c-851c-5376a5b20d83")
+		)
+		(instances
+			(project "Startracker"
+				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
+					(reference "J9")
 					(unit 1)
 				)
 			)
@@ -8267,6 +8453,73 @@
 			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
 					(reference "#PWR0101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 231.14 120.65 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d3032644-625a-42d5-92b4-d04aacec7fd6")
+		(property "Reference" "#PWR025"
+			(at 234.95 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 227.33 120.6499 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 231.14 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 231.14 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 231.14 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0ee1b29a-0296-4e6f-a5a7-0112fc87b9f4")
+		)
+		(instances
+			(project "Startracker"
+				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
