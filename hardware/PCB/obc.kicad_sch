@@ -2434,17 +2434,6 @@
 		)
 		(uuid "06073dee-4480-4e79-aef9-d03d479cfec5")
 	)
-	(hierarchical_label "D2_B1"
-		(shape input)
-		(at 142.24 86.36 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "0656dcf0-1375-46f6-9c47-ec75baaf604a")
-	)
 	(hierarchical_label "DIR1"
 		(shape input)
 		(at 111.76 99.06 180)
@@ -2455,39 +2444,6 @@
 			(justify right)
 		)
 		(uuid "125906f7-8012-4f49-bd14-52f9351deaa4")
-	)
-	(hierarchical_label "D2_A1"
-		(shape input)
-		(at 111.76 127 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "1a55e2c6-ccb8-4745-862a-69c05949538c")
-	)
-	(hierarchical_label "D3_B2"
-		(shape input)
-		(at 111.76 114.3 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "207efd8d-8b72-4125-9ab9-6a5329c4f7a0")
-	)
-	(hierarchical_label "D3_A1"
-		(shape input)
-		(at 111.76 109.22 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "2297f70b-bcd9-4845-81ad-9a75837d6960")
 	)
 	(hierarchical_label "LORA_RX"
 		(shape input)
@@ -2522,27 +2478,16 @@
 		)
 		(uuid "52b41b83-33fb-4f7a-9977-17cac51fc14d")
 	)
-	(hierarchical_label "D3_B1"
+	(hierarchical_label "TB_SCL"
 		(shape input)
-		(at 111.76 111.76 180)
+		(at 85.09 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "533610f4-957c-415e-9bf1-e53e5bdd1752")
-	)
-	(hierarchical_label "D2_A2"
-		(shape input)
-		(at 111.76 124.46 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "535bdf23-dc29-497a-aba9-f37c85a7f234")
+		(uuid "65936e40-54b8-4a68-a3d5-db69003ed9d0")
 	)
 	(hierarchical_label "LORA_TX"
 		(shape input)
@@ -2588,6 +2533,17 @@
 		)
 		(uuid "88e01ac5-5fb5-44b7-88f6-d89b5e44b2dd")
 	)
+	(hierarchical_label "TB_SDA"
+		(shape input)
+		(at 85.09 109.22 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9c2966dc-f0d6-40ae-9465-ddc8b55de205")
+	)
 	(hierarchical_label "USB_D+"
 		(shape input)
 		(at 142.24 93.98 0)
@@ -2610,17 +2566,6 @@
 		)
 		(uuid "c1d181c7-8f97-4177-82ff-f925c74af2e9")
 	)
-	(hierarchical_label "D2_B2"
-		(shape input)
-		(at 142.24 88.9 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "c21142e6-a085-4078-b719-06678012dfe4")
-	)
 	(hierarchical_label "GPS_TX"
 		(shape input)
 		(at 142.24 96.52 0)
@@ -2632,17 +2577,6 @@
 		)
 		(uuid "ca9dd0d0-c6e0-4995-8567-9ad77e89fa98")
 	)
-	(hierarchical_label "D3_A2"
-		(shape input)
-		(at 111.76 93.98 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d9b66edb-32ea-48d5-8611-eb9e3065a295")
-	)
 	(hierarchical_label "Focus"
 		(shape input)
 		(at 111.76 88.9 180)
@@ -2653,17 +2587,6 @@
 			(justify right)
 		)
 		(uuid "e03e7b67-58c9-42c5-800d-7b4c2d29a339")
-	)
-	(hierarchical_label "D1_EN"
-		(shape input)
-		(at 111.76 101.6 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e6770850-d3eb-4923-b160-1b48307c24c6")
 	)
 	(hierarchical_label "I2C_SDA"
 		(shape input)
