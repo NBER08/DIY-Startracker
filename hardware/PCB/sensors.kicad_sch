@@ -5570,7 +5570,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "GPS"
+		(property "Value" "IMU_EXT"
 			(at 240.03 142.2399 0)
 			(effects
 				(font
