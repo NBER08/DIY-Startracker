@@ -2448,7 +2448,7 @@
 	)
 	(hierarchical_label "SX_DIO1"
 		(shape input)
-		(at 111.76 121.92 180)
+		(at 111.76 109.22 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2470,18 +2470,18 @@
 	)
 	(hierarchical_label "SX_NSS"
 		(shape input)
-		(at 111.76 119.38 180)
+		(at 142.24 96.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "2d6fcd65-0db2-402b-bb87-e393568d1ebc")
 	)
 	(hierarchical_label "SX_MOSI"
 		(shape input)
-		(at 111.76 114.3 180)
+		(at 111.76 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2503,12 +2503,12 @@
 	)
 	(hierarchical_label "SX_BUSY"
 		(shape input)
-		(at 142.24 96.52 0)
+		(at 111.76 111.76 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "55a1a84b-e6be-4f5a-982f-60583c94a5d6")
 	)
@@ -2525,7 +2525,7 @@
 	)
 	(hierarchical_label "SX_SCK"
 		(shape input)
-		(at 111.76 111.76 180)
+		(at 111.76 121.92 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2547,7 +2547,7 @@
 	)
 	(hierarchical_label "I2C_SCL"
 		(shape input)
-		(at 181.61 86.36 0)
+		(at 181.61 88.9 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2613,7 +2613,7 @@
 	)
 	(hierarchical_label "SX_RST"
 		(shape input)
-		(at 111.76 109.22 180)
+		(at 111.76 114.3 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2646,7 +2646,7 @@
 	)
 	(hierarchical_label "I2C_SDA"
 		(shape input)
-		(at 181.61 88.9 0)
+		(at 181.61 86.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2978,7 +2978,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "RF_Module:ESP32-S3-WROOM-1"
+		(property "Footprint" "saját:sa"
 			(at 127 101.6 0)
 			(effects
 				(font
