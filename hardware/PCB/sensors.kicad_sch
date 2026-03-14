@@ -3371,6 +3371,10 @@
 		(uuid "4b61beac-59f2-49a2-bc1f-598660f004ed")
 	)
 	(no_connect
+		(at -49.53 60.96)
+		(uuid "68c6d4a2-73d6-4c6e-bb1b-c4bfa0963d60")
+	)
+	(no_connect
 		(at 52.07 83.82)
 		(uuid "7224ac27-fb16-4b05-9294-8d55a7981114")
 	)
@@ -3401,6 +3405,10 @@
 	(no_connect
 		(at 229.87 100.33)
 		(uuid "ad8e0ad0-9328-417c-8eda-ca9c2fd8031e")
+	)
+	(no_connect
+		(at -49.53 58.42)
+		(uuid "af18a239-545e-4434-a5a9-0e93016d54e3")
 	)
 	(no_connect
 		(at 229.87 110.49)
@@ -4262,6 +4270,16 @@
 	)
 	(wire
 		(pts
+			(xy 36.83 76.2) (xy 40.64 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba4f84f2-f4e0-48b7-9efd-1c5e91fd8ade")
+	)
+	(wire
+		(pts
 			(xy 90.17 25.4) (xy 87.63 25.4)
 		)
 		(stroke
@@ -4552,6 +4570,16 @@
 	)
 	(wire
 		(pts
+			(xy 48.26 76.2) (xy 52.07 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5502473-dd2d-4f5a-a6ea-207e14bf47aa")
+	)
+	(wire
+		(pts
 			(xy 242.57 92.71) (xy 236.22 92.71)
 		)
 		(stroke
@@ -4703,28 +4731,6 @@
 		(uuid "444a444c-c0fe-4c65-a0ad-d2e4cc313ec3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 118.11 183.0228 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "BNO_RST"
-		(shape input)
-		(at 52.07 76.2 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "bf1cde41-7923-4efb-827f-1aed48d99e59")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 40.7391 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8362,6 +8368,100 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 44.45 76.2 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8227e61f-2b25-4fcd-b1c8-438ee7812b2a")
+		(property "Reference" "R35"
+			(at 44.45 74.168 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 44.45 78.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 44.45 74.422 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 44.45 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 44.45 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 44.45 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "TAPE_REEL" ""
+			(at 44.45 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "VOLUME" ""
+			(at 44.45 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9a23fc64-4305-421a-b728-4232839cc566")
+		)
+		(pin "1"
+			(uuid "f825ec8b-bbfe-47c4-a4a6-ee4027ff73db")
+		)
+		(instances
+			(project "Startracker"
+				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
+					(reference "R35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 223.52 60.96 270)
 		(unit 1)
@@ -8422,6 +8522,72 @@
 			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
 					(reference "#PWR058")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 36.83 76.2 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "89c4ea10-83ff-4841-9932-d93f6f5ac008")
+		(property "Reference" "#PWR0120"
+			(at 40.64 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 31.75 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 36.83 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 36.83 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5f6bb4b0-83ba-4a28-aadb-e130164b418d")
+		)
+		(instances
+			(project "Startracker"
+				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f"
+					(reference "#PWR0120")
 					(unit 1)
 				)
 			)

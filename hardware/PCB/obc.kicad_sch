@@ -2459,7 +2459,7 @@
 	)
 	(hierarchical_label "DIR1"
 		(shape input)
-		(at 111.76 99.06 180)
+		(at 111.76 104.14 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2492,7 +2492,7 @@
 	)
 	(hierarchical_label "TMC_TX"
 		(shape input)
-		(at 111.76 104.14 180)
+		(at 111.76 99.06 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2536,7 +2536,7 @@
 	)
 	(hierarchical_label "STEP1"
 		(shape input)
-		(at 111.76 96.52 180)
+		(at 111.76 101.6 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2591,7 +2591,7 @@
 	)
 	(hierarchical_label "TMC_RX"
 		(shape input)
-		(at 111.76 101.6 180)
+		(at 111.76 96.52 180)
 		(effects
 			(font
 				(size 1.27 1.27)

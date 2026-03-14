@@ -193,6 +193,9 @@
       ],
       "track_widths": [
         0.0,
+        0.0,
+        0.1,
+        0.15,
         0.2,
         0.254,
         0.5,
@@ -256,7 +259,16 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      [
+        "multiple_net_names|304800|1003300|590778c6-c8ea-43a7-9fa9-d53b2880e7ae|73f614dc-b2ae-4a4b-ab1d-ccccff413d49|/45ea479c-a8ef-4c14-88b0-391ede4fd156/6e02cd3b-df8c-4b96-893d-01e1e29664e1|/45ea479c-a8ef-4c14-88b0-391ede4fd156/6e02cd3b-df8c-4b96-893d-01e1e29664e1|/45ea479c-a8ef-4c14-88b0-391ede4fd156/6e02cd3b-df8c-4b96-893d-01e1e29664e1",
+        "Reason: single-wire UART"
+      ],
+      [
+        "pin_not_driven|-495300|609600|d0309519-3896-417f-b661-300ad8822102|00000000-0000-0000-0000-000000000000|/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f|/45ea479c-a8ef-4c14-88b0-391ede4fd156/e8f32813-0603-4e85-9176-ac6a48f0a36f|",
+        ""
+      ]
+    ],
     "meta": {
       "version": 0
     },
