@@ -20,7 +20,7 @@ Items that **must be validated before finalising the PCB layout or placing a com
 
 ---
 
-## 2 — TMC2209 thermal performance on home-assembled PCB
+## 2 — TMC2209 thermal performance on PCB
 
 **Risk:** The QFN-28 thermal pad if not soldered properly → chip overheats → thermal shutdown mid-session. 
 **Acceptable threshold:** Chip case temperature < 70 °C at full run current after 30 minutes continuous operation.
@@ -104,3 +104,21 @@ Items that **must be validated before finalising the PCB layout or placing a com
 **Notes:**
 
 ---
+## 7 — Structural integrity
+
+**Risk:** 3D printed parts and interconnects might not be strong enough to support the weigth of the assembly.
+**Acceptable threshold:** With 2x the expected load, no craks, major bending and is stable.
+
+**Validation method:**
+1. Determine max payload: camera body + heaviest intended lens. (Already done for number 6)
+2. Assemble a prototype.
+3. Attach test weigths in the place of the real compnents.
+4. Check for bending, cracks or deformation.
+5. If there is any redesign and retest.
+
+**Status:** Partially tested, bearings have basically no give at 2x expected load.
+**Notes:**
+
+---
+
+
