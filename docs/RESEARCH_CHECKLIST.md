@@ -68,7 +68,7 @@ Items that **must be validated before finalising the PCB layout or placing a com
 
 **Status:** Not tested
 **Notes:**
-
+Remember to calibrate mag sensor in software
 ---
 
 ## 5 — GPS + LoRa RF coexistence
