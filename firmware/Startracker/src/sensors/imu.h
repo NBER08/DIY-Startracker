@@ -20,7 +20,3 @@ ImuData imu_get_mount();
 
 // Get latest orientation from the CAMERA IMU (on the camera plate)
 ImuData imu_get_camera();
-
-// How far has the camera drifted from the tracking axis?
-// Returns degrees. Zero = perfect tracking.
-float imu_get_error_deg();

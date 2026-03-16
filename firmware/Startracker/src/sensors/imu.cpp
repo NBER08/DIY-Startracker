@@ -85,18 +85,3 @@ ImuData imu_get_camera() {
     read_sensor(imu_camera, camera_data);
     return camera_data;
 }
-
-float imu_get_error_deg() {
-    // The error is simply the difference between where the mount
-    // is pointing and where the camera is pointing.
-    // In perfect tracking, they rotate together and the difference is zero.
-    if (!mount_data.valid || !camera_data.valid) return 0.0f;
-
-    float diff = camera_data.yaw - mount_data.yaw;
-
-    // Keep in range -180 to +180
-    if (diff >  180.0f) diff -= 360.0f;
-    if (diff < -180.0f) diff += 360.0f;
-
-    return diff;
-}

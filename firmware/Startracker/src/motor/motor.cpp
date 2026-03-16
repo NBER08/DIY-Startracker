@@ -5,8 +5,8 @@
 #include "esp_attr.h"   // for IRAM_ATTR
 
 // ---- Pin assignments ----
-#define STEP_PIN  6
-#define DIR_PIN   7
+#define STEP_PIN  GPIO_NUM_6
+#define DIR_PIN   GPIO_NUM_7
 
 // ---- Motor geometry ----
 // Change these to match your hardware.

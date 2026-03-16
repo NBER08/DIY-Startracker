@@ -65,7 +65,7 @@ GpsFix gps_read() {
 
     // isValid() returns true once TinyGPSPlus has received
     // and decoded at least one valid reading for that field
-    fix.valid = gps.location.isValid();  // reject stale fixes (> 2 seconds old)
+    fix.valid = gps.location.isValid();
 
     if (fix.valid) {
         fix.lat      = gps.location.lat();   // already in decimal degrees

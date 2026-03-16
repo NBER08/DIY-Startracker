@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#include "gps.h"
-#include "imu.h"
-#include "motor.h"
+#include "sensors/gps.h"
+#include "sensors/imu.h"
+#include "motor/motor.h"
 
 // =========================================================================
 //  STAR TRACKER — simplified main program
@@ -19,13 +19,9 @@
 // How often to print a status line to serial (milliseconds)
 #define STATUS_INTERVAL_MS  2000
 
-// How much IMU error we tolerate before applying a correction (degrees)
-// Below this threshold we do nothing — avoids over-correcting tiny noise
-#define ERROR_THRESHOLD_DEG  0.005f
-
 void setup() {
     Serial.begin(115200);
-    delay(500);   // give serial monitor time to open
+    delay(2000);   // give serial monitor time to open
     Serial.println("\n=== Star Tracker ===");
 
     // --- Step 1: Initialise all hardware ---
@@ -35,7 +31,6 @@ void setup() {
 
     // --- Step 2: Wait for GPS fix ---
     Serial.println("Waiting for GPS fix...");
-    Serial.println("(point the GPS antenna at open sky)");
 
     GpsFix fix;
     while (true) {
@@ -61,7 +56,7 @@ void setup() {
     //
     // In the full version, we would also:
     //   - Auto-align the polar axis using the magnetometer
-    //   - Fine-tune using IMU feedback
+    //   - start reading from sensors and start LoRa telemetry
     // For now we assume you've manually pointed the polar axis at Polaris.
 
     motor_start_tracking();
@@ -81,13 +76,6 @@ void loop() {
     GpsFix fix    = gps_read();
     ImuData mount  = imu_get_mount();
     ImuData camera = imu_get_camera();
-    float   error  = imu_get_error_deg();
-
-    // Apply correction only if error is large enough to matter
-    if (mount.valid && camera.valid && abs(error) > ERROR_THRESHOLD_DEG) {
-        motor_apply_correction(error);
-    }
-
     // Print status every STATUS_INTERVAL_MS milliseconds
     // (not every loop iteration — that would flood the serial port)
     unsigned long now = millis();
@@ -102,8 +90,6 @@ void loop() {
                       mount.valid ? "OK" : "no data");
         Serial.printf("Camera: yaw=%.2f  %s\n",
                       camera.yaw, camera.valid ? "OK" : "no data");
-        Serial.printf("Error: %.4f deg  (threshold: %.3f)\n",
-                      error, ERROR_THRESHOLD_DEG);
     }
 
     // Small delay to avoid hammering the I2C bus
