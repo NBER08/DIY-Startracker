@@ -22,7 +22,7 @@
 #define STEP_PERIOD_US (SIDEREAL_US / TOTAL_STEPS)
 
 // ---- State ----
-static gptimer_handle_t timer = NULL;
+static hw_timer_t       *step_timer = NULL;
 static volatile uint64_t step_count = 0;
 
 // This is the period the timer is currently using.
@@ -37,20 +37,20 @@ static volatile uint64_t current_period_us = STEP_PERIOD_US;
 //
 // Rule: do as little as possible here. Just pulse the pin and leave.
 // -------------------------------------------------------------------------
-static bool IRAM_ATTR step_isr(gptimer_handle_t t,
-                                const gptimer_alarm_event_data_t *e,
-                                void *arg) {
-    // Pull STEP pin high → TMC2209 registers a step
-    gpio_set_level(STEP_PIN, 1);
+void IRAM_ATTR step_isr() {
+    // Pulse STEP pin HIGH → TMC2209 registers one microstep
+    digitalWrite(STEP_PIN, HIGH);
 
-    // Wait 2 µs — TMC2209 needs at least 1 µs pulse width
-    esp_rom_delay_us(2);
+    // TMC2209 needs the pulse to be at least 1 µs wide.
+    // ets_delay_us() is a busy-wait that is safe to call from an ISR.
+    // (Don't use Arduino's delayMicroseconds() inside an ISR — it can
+    //  behave unpredictably because it relies on interrupts itself.)
+    ets_delay_us(2);
 
-    // Pull STEP pin low — step is complete
-    gpio_set_level(STEP_PIN, 0);
+    // Pull LOW — step is complete
+    digitalWrite(STEP_PIN, LOW);
 
     step_count++;
-    return false;
 }
 
 // -------------------------------------------------------------------------
@@ -58,76 +58,39 @@ static bool IRAM_ATTR step_isr(gptimer_handle_t t,
 // -------------------------------------------------------------------------
 
 void motor_begin() {
-    // Set up STEP and DIR as outputs
-    gpio_config_t io = {};
-    io.pin_bit_mask = (1ULL << STEP_PIN) | (1ULL << DIR_PIN);
-    io.mode         = GPIO_MODE_OUTPUT;
-    gpio_config(&io);
-    gpio_set_level(STEP_PIN, 0);
-    gpio_set_level(DIR_PIN,  0);   // 0 = forward (eastward tracking)
+    pinMode(STEP_PIN, OUTPUT);
+    pinMode(DIR_PIN,  OUTPUT);
+    digitalWrite(STEP_PIN, LOW);
+    digitalWrite(DIR_PIN,  LOW);   // LOW = forward (eastward tracking)
 
-    // Create a hardware timer at 1 MHz resolution (1 tick = 1 µs)
-    gptimer_config_t timer_cfg = {};
-    timer_cfg.clk_src       = GPTIMER_CLK_SRC_DEFAULT;
-    timer_cfg.direction     = GPTIMER_COUNT_UP;
-    timer_cfg.resolution_hz = 1000000;   // 1 MHz
-    gptimer_new_timer(&timer_cfg, &timer);
+    // Create a timer running at 1 MHz (1 tick = 1 µs).
+    // timerBegin(frequency_hz) is the Arduino ESP32 core 3.x API.
+    // If you are on core 2.x the call is: timerBegin(0, 80, true)
+    // where 0=timer number, 80=divider (80MHz/80=1MHz), true=count up.
+    step_timer = timerBegin(1000000);
 
-    // Tell the timer which function to call when it fires
-    gptimer_event_callbacks_t cbs = {};
-    cbs.on_alarm = step_isr;
-    gptimer_register_event_callbacks(timer, &cbs, NULL);
+    // Connect the ISR function to this timer
+    timerAttachInterrupt(step_timer, &step_isr);
 
-    // Set the alarm to fire every STEP_PERIOD_US and automatically reset
-    gptimer_alarm_config_t alarm = {};
-    alarm.alarm_count                = STEP_PERIOD_US;
-    alarm.reload_count               = 0;
-    alarm.flags.auto_reload_on_alarm = true;
-    gptimer_set_alarm_action(timer, &alarm);
+    // Set the alarm: fire every STEP_PERIOD_US ticks, repeat forever.
+    // timerAlarm(timer, ticks_until_alarm, repeat, ticks_to_reload_to)
+    timerAlarm(step_timer, STEP_PERIOD_US, true, 0);
 
-    gptimer_enable(timer);
+    // timerAlarm() starts the timer — stop it immediately.
+    // We only want it running when the state machine says TRACKING.
+    timerStop(step_timer);
 
-    Serial.printf("Motor: step period = %llu µs (%.4f Hz)\n",
-                  STEP_PERIOD_US,
-                  1000000.0 / (double)STEP_PERIOD_US);
+    Serial.printf("Motor ready: period=%llu µs  (%.4f Hz)\n",
+                  STEP_PERIOD_US, 1000000.0 / (double)STEP_PERIOD_US);
 }
 
 void motor_start_tracking() {
     step_count = 0;
-    gptimer_start(timer);
+    timerStart(step_timer);
     Serial.println("Motor: tracking started");
 }
 
 void motor_stop() {
-    gptimer_stop(timer);
+    timerStop(step_timer);
     Serial.println("Motor: stopped");
-}
-
-void motor_apply_correction(float correction_deg) {
-    // Convert the angular error to a change in step period.
-    //
-    // If the camera is 0.01° ahead, we need to slow down slightly.
-    // We do this by making the timer period a tiny bit longer.
-    //
-    // This is a simple proportional controller:
-    //   error_deg × gain = how many microseconds to add/subtract
-    //
-    const float gain = 100.0f;  // tune this during field testing
-    int64_t adjust = (int64_t)(correction_deg * gain);
-
-    // New period = base period + small adjustment
-    int64_t new_period = (int64_t)STEP_PERIOD_US + adjust;
-
-    // Safety clamp — never let it go crazy
-    if (new_period < 100000LL)   new_period = 100000LL;   // max 10 Hz
-    if (new_period > 300000000LL) new_period = 300000000LL; // min 0.003 Hz
-
-    current_period_us = (uint64_t)new_period;
-
-    // Update the timer — this takes effect on the next alarm cycle
-    gptimer_alarm_config_t alarm = {};
-    alarm.alarm_count                = current_period_us;
-    alarm.reload_count               = 0;
-    alarm.flags.auto_reload_on_alarm = true;
-    gptimer_set_alarm_action(timer, &alarm);
 }

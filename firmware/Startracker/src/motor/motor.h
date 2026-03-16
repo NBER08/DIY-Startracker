@@ -13,8 +13,3 @@ void motor_start_tracking();
 // Stop the motor completely
 void motor_stop();
 
-// Nudge the rate up or down by a tiny amount.
-// correction_deg: how many degrees the camera has drifted.
-//   Positive = camera is ahead → slow down
-//   Negative = camera is behind → speed up
-void motor_apply_correction(float correction_deg);
