@@ -13,7 +13,7 @@
 // period_us = (sidereal day in microseconds) / (total steps per revolution)
 // total_steps = motor_steps × microstep × gear_ratio
 #define MOTOR_STEPS   200     // steps per revolution of the motor shaft
-#define MICROSTEP     16      // set on TMC2209 via UART
+#define MICROSTEP     32      // set on TMC2209 via UART
 #define GEAR_RATIO    144     // how many motor turns per one output turn
 #define SIDEREAL_US   86164090500ULL   // one sidereal day in microseconds
 
@@ -30,7 +30,7 @@ static volatile uint64_t step_count = 0;
 static volatile uint64_t current_period_us = STEP_PERIOD_US;
 
 // -------------------------------------------------------------------------
-// THE ISR — this runs every ~187ms, triggered by the hardware timer.
+// THE ISR — this runs every ~93.5ms, triggered by the hardware timer.
 //
 // IRAM_ATTR puts this function in fast internal RAM so it never
 // has to wait for the flash cache. This is what makes timing precise.
@@ -50,7 +50,7 @@ static bool IRAM_ATTR step_isr(gptimer_handle_t t,
     gpio_set_level(STEP_PIN, 0);
 
     step_count++;
-    return false;   // false = no need to wake any FreeRTOS task
+    return false;
 }
 
 // -------------------------------------------------------------------------

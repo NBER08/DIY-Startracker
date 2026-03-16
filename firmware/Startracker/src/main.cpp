@@ -2,6 +2,7 @@
 #include "sensors/gps.h"
 #include "sensors/imu.h"
 #include "motor/motor.h"
+#include "sensors/bme.h"
 
 // =========================================================================
 //  STAR TRACKER — simplified main program
@@ -28,6 +29,7 @@ void setup() {
     gps_begin();
     imu_begin();
     motor_begin();
+    bme_begin();
 
     // --- Step 2: Wait for GPS fix ---
     Serial.println("Waiting for GPS fix...");
@@ -76,6 +78,8 @@ void loop() {
     GpsFix fix    = gps_read();
     ImuData mount  = imu_get_mount();
     ImuData camera = imu_get_camera();
+    BmeData bme    = bme_read();
+
     // Print status every STATUS_INTERVAL_MS milliseconds
     // (not every loop iteration — that would flood the serial port)
     unsigned long now = millis();
@@ -90,6 +94,8 @@ void loop() {
                       mount.valid ? "OK" : "no data");
         Serial.printf("Camera: yaw=%.2f  %s\n",
                       camera.yaw, camera.valid ? "OK" : "no data");
+        Serial.printf("BME:   temp=%.1f  pressure=%.1f  humidity=%.1f\n",
+                      bme.temperature, bme.pressure, bme.humidity);
     }
 
     // Small delay to avoid hammering the I2C bus
