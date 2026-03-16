@@ -9,6 +9,13 @@
 #define GPS_RX_PIN  44
 #define GPS_BAUD    9600
 
+
+void gps_init(uint16_t rx_pin, uint16_t tx_pin, uint32_t baud) {
+    GpsSerial.begin(baud, SERIAL_8N1, rx_pin, tx_pin);
+}
+
+
+/*
 // We use HardwareSerial port 1 on the ESP32-S3
 static HardwareSerial GpsSerial(1);
 
@@ -155,3 +162,4 @@ GpsFix gps_read() {
     gps_poll();          // process any new bytes that arrived
     return latest_fix;   // return a copy of the latest known fix
 }
+*/
