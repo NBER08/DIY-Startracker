@@ -5,7 +5,7 @@
 #include "esp_attr.h"   // for IRAM_ATTR
 
 // ---- Pin assignments ----
-#define STEP_PIN  GPIO_NUM_6
+#define STEP_PIN  6
 #define DIR_PIN   GPIO_NUM_7
 
 // ---- Motor geometry ----
@@ -45,7 +45,7 @@ void IRAM_ATTR step_isr() {
     // ets_delay_us() is a busy-wait that is safe to call from an ISR.
     // (Don't use Arduino's delayMicroseconds() inside an ISR — it can
     //  behave unpredictably because it relies on interrupts itself.)
-    ets_delay_us(2);
+    ets_delay_us(200);
 
     // Pull LOW — step is complete
     digitalWrite(STEP_PIN, LOW);

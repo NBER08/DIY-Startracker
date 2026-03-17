@@ -26,10 +26,10 @@ void setup() {
     Serial.println("\n=== Star Tracker ===");
 
     // --- Step 1: Initialise all hardware ---
-    gps_begin();
-    imu_begin();
+    // gps_begin();
+    // imu_begin();
     motor_begin();
-    bme_begin();
+    // bme_begin();
 
     // --- Step 2: Wait for GPS fix ---
     Serial.println("Waiting for GPS fix...");
