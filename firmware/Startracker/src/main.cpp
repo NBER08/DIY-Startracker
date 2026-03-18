@@ -1,8 +1,19 @@
 #include <Arduino.h>
+#include "config.h"
 #include "sensors/gps.h"
 #include "sensors/imu.h"
-#include "motor/motor.h"
 #include "sensors/bme.h"
+#include "motor/motor.h"
+#include "comms/lora.h"
+
+#define SIMULATE_HARDWARE  1
+
+#define STATUS_INTERVAL_MS   2000
+#define LORA_INTERVAL_MS     5000
+#define ERROR_THRESHOLD_DEG  0.005f
+#define HUMIDITY_WARN_PCT    80.0f
+
+static bool is_tracking = false;
 
 // =========================================================================
 //  STAR TRACKER — simplified main program
@@ -17,19 +28,41 @@
 //    4. Loop forever: read IMU, apply small corrections
 // =========================================================================
 
-// How often to print a status line to serial (milliseconds)
-#define STATUS_INTERVAL_MS  2000
+
+static void trigger_shutter(uint8_t duration_sec) {
+    if (duration_sec == 0) duration_sec = 1;
+    Serial.printf("Shutter: opening for %d seconds\n", duration_sec);
+
+    digitalWrite(FOCUS_PIN,   HIGH);
+    delay(300);                              // focus hold before firing
+    digitalWrite(SHUTTER_PIN, HIGH);
+    delay((uint32_t)duration_sec * 1000);   // hold open
+    digitalWrite(SHUTTER_PIN, LOW);
+    digitalWrite(FOCUS_PIN,   LOW);
+
+    Serial.println("Shutter: closed");
+}
+
+static float get_temperature()  { return 14.5f;    }
+static float get_humidity()     { return 68.0f;    }
+static float get_battery_mv()   { return 11800.0f; }
+static float get_current_ma()   { return 420.0f;   }
 
 void setup() {
     Serial.begin(115200);
-    delay(2000);   // give serial monitor time to open
+    delay(500);
     Serial.println("\n=== Star Tracker ===");
 
-    // --- Step 1: Initialise all hardware ---
-    // gps_begin();
-    // imu_begin();
+    pinMode(SHUTTER_PIN, OUTPUT);
+    pinMode(FOCUS_PIN,   OUTPUT);
+    digitalWrite(SHUTTER_PIN, LOW);
+    digitalWrite(FOCUS_PIN,   LOW);
+
+    gps_begin();
+    imu_begin();
     motor_begin();
-    // bme_begin();
+    lora_begin();
+    bme_begin();
 
     // --- Step 2: Wait for GPS fix ---
     Serial.println("Waiting for GPS fix...");
@@ -62,6 +95,7 @@ void setup() {
     // For now we assume you've manually pointed the polar axis at Polaris.
 
     motor_start_tracking();
+    is_tracking = true;
     Serial.println("Tracking started. Check the stars!");
 }
 
@@ -73,6 +107,11 @@ void loop() {
     //   - If the camera has drifted, nudge the motor
 
     static unsigned long last_status = 0;
+    static unsigned long last_lora   = 0;
+
+    GpsFix  fix    = gps_read();
+    ImuData mount  = imu_get_mount();
+    ImuData camera = imu_get_camera();
 
     // Read sensors
     GpsFix fix    = gps_read();
@@ -80,22 +119,61 @@ void loop() {
     ImuData camera = imu_get_camera();
     BmeData bme    = bme_read();
 
-    // Print status every STATUS_INTERVAL_MS milliseconds
-    // (not every loop iteration — that would flood the serial port)
+        // LoRa command handler
+    LoraCmdPacket pkt = lora_get_command();
+    switch (pkt.cmd) {
+        case CMD_START:
+            if (!is_tracking) {
+                motor_start_tracking();
+                is_tracking = true;
+            }
+            break;
+        case CMD_STOP:
+            if (is_tracking) {
+                motor_stop();
+                is_tracking = false;
+            }
+            break;
+        case CMD_SHUTTER:
+            // pkt.param = exposure duration in seconds sent by the controller
+            trigger_shutter(pkt.param);
+            break;
+        case CMD_PING:
+            Serial.println("LoRa: ping received");
+            break;
+        default:
+            break;
+    }
+
+    // Serial status
     unsigned long now = millis();
     if (now - last_status > STATUS_INTERVAL_MS) {
         last_status = now;
+        Serial.printf("steps=%llu  err=%.4f  sats=%d  temp=%.1fC  hum=%.1f%%  bat=%.2fV  %dma\n",
+                      (unsigned long long)motor_get_step_count(),
+                      fix.satellites,
+                      get_temperature(),
+                      get_humidity(),
+                      get_battery_mv() / 1000.0f,
+                      (int)get_current_ma());
+    }
 
-        Serial.println("-----------------------------");
-        Serial.printf("GPS:   sats=%d  valid=%s\n",
-                      fix.satellites, fix.valid ? "yes" : "no");
-        Serial.printf("Mount: pitch=%.2f  roll=%.2f  yaw=%.2f  %s\n",
-                      mount.pitch, mount.roll, mount.yaw,
-                      mount.valid ? "OK" : "no data");
-        Serial.printf("Camera: yaw=%.2f  %s\n",
-                      camera.yaw, camera.valid ? "OK" : "no data");
-        Serial.printf("BME:   temp=%.1f  pressure=%.1f  humidity=%.1f\n",
-                      bme.temperature, bme.pressure, bme.humidity);
+    // LoRa status broadcast
+    if (now - last_lora > LORA_INTERVAL_MS) {
+        last_lora = now;
+        float hum = get_humidity();
+        LoraStatus s;
+        s.tracking_error    = 0;
+        s.is_tracking       = is_tracking;
+        s.gps_satellites    = fix.satellites;
+        s.gps_valid         = fix.valid;
+        s.temperature_c     = get_temperature();
+        s.humidity_pct      = hum;
+        s.humidity_warning  = (hum > HUMIDITY_WARN_PCT);
+        s.battery_mv        = get_battery_mv();
+        s.current_ma        = get_current_ma();
+        s.rssi              = 0;
+        lora_send_status(s);
     }
 
     // Small delay to avoid hammering the I2C bus

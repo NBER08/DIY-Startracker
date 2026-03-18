@@ -84,3 +84,7 @@ void motor_stop() {
     timerStop(step_timer);
     Serial.println("Motor: stopped");
 }
+
+uint64_t motor_get_step_count() {
+    return step_count;
+}

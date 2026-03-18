@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 // The motor module has one job: spin the polar axis at the sidereal rate.
 // Everything else in the system either starts it, stops it, or
@@ -13,3 +14,4 @@ void motor_start_tracking();
 // Stop the motor completely
 void motor_stop();
 
+uint64_t motor_get_step_count();   // added so main.cpp can report steps

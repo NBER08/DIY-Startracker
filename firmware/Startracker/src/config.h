@@ -55,6 +55,10 @@ static float cal_offset_y = 0.0f;
 #define POLARIS_RA_HRS   2.5303    // Right Ascension: 2 hours 31 minutes
 #define POLARIS_DEC_DEG  89.2641   // Declination: 89° 15'
 
+// ---- Camera ----
+#define SHUTTER_PIN  38     // drives NPN transistor to camera shutter jack
+#define FOCUS_PIN    39     // drives NPN transistor to camera focus jack
+
 // ---- LoRa (SX1261, SPI) ----
 #define LORA_MOSI    21
 #define LORA_MISO    20
@@ -64,6 +68,7 @@ static float cal_offset_y = 0.0f;
 #define LORA_RST     15
 #define LORA_BUSY    16
 #define LORA_FREQ    868.0  // MHz — use 915.0 for US/AU
+#define LORA_TX_DBM  10     // LoRa transmit power in dBm (-17– +15)
 
 // ---- Misc ----
 #define LED_PIN      2      // onboard LED
