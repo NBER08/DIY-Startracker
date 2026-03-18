@@ -1,12 +1,8 @@
 #include "gps.h"
+#include "config.h"
 #include <Arduino.h>
 #include <TinyGPSPlus.h>
 #include <time.h>
-
-// ---- Pin and port configuration ----
-#define GPS_RX_PIN   44    // ESP32 receives from M8N TX
-#define GPS_TX_PIN   43    // ESP32 transmits to M8N RX
-#define GPS_BAUD     9600
 
 // HardwareSerial(1) = UART1 on the ESP32-S3
 // The number in brackets is the UART port (0, 1, or 2).

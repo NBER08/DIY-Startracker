@@ -1,4 +1,5 @@
 #include "power.h"
+#include "config.h"
 #include <Arduino.h>
 #include <Adafruit_INA219.h>
 
@@ -14,13 +15,6 @@
 //    Logic rail shunt:  100 mΩ  (0.100 Ω) — at address 0x41
 // =============================================================================
 
-// I2C addresses — set by A0/A1 pins on the INA219
-#define ADDR_MOTOR  0x40    // A1=0, A0=0
-#define ADDR_LOGIC  0x41    // A1=0, A0=1
-
-// Fault thresholds
-#define BATTERY_LOW_V    5.5f    // 6V battery is "low" below this
-#define MOTOR_JAM_MA     3500.0f  // normal hold current ~1.2A; jam = much higher
 
 static Adafruit_INA219 ina_motor(ADDR_MOTOR);
 static Adafruit_INA219 ina_logic(ADDR_LOGIC);

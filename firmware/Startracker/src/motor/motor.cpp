@@ -1,20 +1,10 @@
 #include "motor.h"
+#include "config.h"
 #include <Arduino.h>
 #include "driver/gptimer.h"
 #include "driver/gpio.h"
 #include "esp_attr.h"   // for IRAM_ATTR
 
-// ---- Pin assignments ----
-#define STEP_PIN  6
-#define DIR_PIN   GPIO_NUM_7
-
-// ---- Motor geometry ----
-// Change these to match your hardware.
-// period_us = (sidereal day in microseconds) / (total steps per revolution)
-// total_steps = motor_steps × microstep × gear_ratio
-#define MOTOR_STEPS   200     // steps per revolution of the motor shaft
-#define MICROSTEP     32      // set on TMC2209 via UART
-#define GEAR_RATIO    144     // how many motor turns per one output turn
 #define SIDEREAL_US   86164090500ULL   // one sidereal day in microseconds
 
 // Calculated period between steps

@@ -1,4 +1,5 @@
 #include "mag.h"
+#include "config.h"
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -15,8 +16,6 @@
 //  Every register has an address (a single byte, like 0x60).
 // =============================================================================
 
-#define MAG_ADDR        0x1E    // I2C address (SA0 pin tied low on your board)
-
 // Register addresses (from IIS2MDCTR datasheet, Table 15)
 #define REG_CFG_A       0x60    // configuration: sets sample rate and mode
 #define REG_CFG_C       0x62    // configuration: enables block data update
@@ -24,20 +23,6 @@
 #define REG_OUTX_L      0x68    // X axis output, low byte
                                 // Y and Z follow at 0x69, 0x6A, 0x6B, 0x6C, 0x6D
 
-// How sensitive is the chip? 1.5 milligauss per raw unit (from datasheet)
-#define SENSITIVITY     1.5f    // mGauss per LSB
-
-// Magnetic declination for Pécs, Hungary ≈ +4.5° East
-// Positive = true north is EAST of magnetic north
-// Look up your exact value at: https://www.magnetic-declination.com
-#define DECLINATION_DEG 4.5f
-
-// Hard-iron calibration offsets.
-// These correct for the magnetic distortion caused by nearby metal
-// (your motors, PCB copper pours, etc).
-// After running mag_calibrate() once, copy the printed values here.
-static float cal_offset_x = 0.0f;
-static float cal_offset_y = 0.0f;
 
 // =============================================================================
 //  Low-level I2C helpers

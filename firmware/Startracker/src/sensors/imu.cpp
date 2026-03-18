@@ -1,16 +1,10 @@
 #include "imu.h"
+#include "config.h"
 #include <Arduino.h>
 #include <Wire.h>
 #include <SparkFun_BNO08x_Arduino_Library.h>
 #include <math.h>
 
-// Two BNO085 sensors on I2C bus 0.
-// The difference between them is just the I2C address,
-// set by the PS1 pin on each chip.
-#define I2C_SDA  8
-#define I2C_SCL  9
-#define ADDR_MOUNT   0x4A   // PS1 = LOW  → address 0x4A
-#define ADDR_CAMERA  0x4B   // PS1 = HIGH → address 0x4B
 
 static BNO08x imu_mount;
 static BNO08x imu_camera;

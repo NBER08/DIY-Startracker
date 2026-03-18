@@ -1,4 +1,5 @@
 #include "astro.h"
+#include "config.h"
 #include <math.h>
 
 // =============================================================================
@@ -17,10 +18,6 @@
 //
 //  Each step is one simple formula. Work through them in order.
 // =============================================================================
-
-// Where is Polaris? (J2000.0 epoch coordinates — accurate enough until ~2050)
-#define POLARIS_RA_HRS   2.5303    // Right Ascension: 2 hours 31 minutes
-#define POLARIS_DEC_DEG  89.2641   // Declination: 89° 15' — very close to pole
 
 // Shorthand
 #define DEG2RAD(d)  ((d) * M_PI / 180.0)
