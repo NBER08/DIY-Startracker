@@ -1463,26 +1463,6 @@
 				(justify left)
 			)
 		)
-		(pin "BNO_SCL" input
-			(at 134.62 63.5 180)
-			(uuid "c008da57-9558-4d0f-a10a-49480c578915")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "BNO_SDA" input
-			(at 134.62 66.04 180)
-			(uuid "1959b273-d90f-480f-97cd-ab4bdac905d5")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "IIS_SCL" input
 			(at 134.62 50.8 180)
 			(uuid "452e4466-da79-4d4e-a3b5-143e62d2d3ab")
@@ -1536,6 +1516,26 @@
 		(pin "BME_SDA" input
 			(at 134.62 46.99 180)
 			(uuid "fbe9b28f-ec4a-4023-8f04-87bde51cd439")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VL_SCL" input
+			(at 134.62 63.5 180)
+			(uuid "59110c92-7bbe-4cac-a344-873e22cc26f1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VL_SDA" input
+			(at 134.62 66.04 180)
+			(uuid "6634f07c-a4f0-4bfc-8f9f-5bd72e62549e")
 			(effects
 				(font
 					(size 1.27 1.27)
