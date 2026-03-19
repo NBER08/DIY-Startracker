@@ -1763,10 +1763,6 @@
 		(uuid "00316c48-1428-43d9-8577-a08821eae1f8")
 	)
 	(no_connect
-		(at 142.24 106.68)
-		(uuid "229f7d75-3cc3-4724-ad83-1ee3a279b55c")
-	)
-	(no_connect
 		(at 142.24 127)
 		(uuid "23177ba6-407d-4cc3-b460-17adf96d64d8")
 	)
@@ -2588,6 +2584,17 @@
 			(justify left)
 		)
 		(uuid "a7e6516d-55cd-4271-8c43-56e7588e46d3")
+	)
+	(hierarchical_label "VL_GPIO1"
+		(shape input)
+		(at 142.24 106.68 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ac100949-d138-402f-9511-c2656e2764a4")
 	)
 	(hierarchical_label "TMC_RX"
 		(shape input)
