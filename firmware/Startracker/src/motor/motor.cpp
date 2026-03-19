@@ -85,6 +85,25 @@ void motor_stop() {
     Serial.println("Motor: stopped");
 }
 
+void motor_slew_steps(int64_t steps) {
+    if (steps == 0) return;
+
+    // Set direction
+    digitalWrite(DIR_PIN, steps > 0 ? LOW : HIGH);
+    int64_t abs_steps = steps > 0 ? steps : -steps;
+
+    // Blocking step loop at slew rate
+    for (int64_t i = 0; i < abs_steps; i++) {
+        digitalWrite(STEP_PIN, HIGH);
+        delayMicroseconds(2);
+        digitalWrite(STEP_PIN, LOW);
+        delayMicroseconds(SLEW_PERIOD_US - 2);
+    }
+
+    // Restore direction to forward for tracking
+    digitalWrite(DIR_PIN, LOW);
+}
+
 uint64_t motor_get_step_count() {
     return step_count;
 }

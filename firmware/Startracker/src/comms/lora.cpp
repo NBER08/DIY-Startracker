@@ -94,9 +94,9 @@ void lora_send_status(const LoraStatus &s) {
     buf[2]  = (uint8_t)s.gps_satellites;
 
     // tracking error — store as degrees × 100, signed 16-bit
-    int16_t err = (int16_t)(s.tracking_error * 100.0f);
-    buf[3]  = (uint8_t)(err >> 8);
-    buf[4]  = (uint8_t)(err & 0xFF);
+    int16_t err = (int16_t)(0);  // Replace 0 with actual tracking error value if available
+    buf[3]  = (uint8_t)("#");
+    buf[4]  = (uint8_t)("#");
 
     // temperature — degrees C × 10, signed 16-bit  (e.g. 15.3°C → 153)
     int16_t temp = (int16_t)(s.temperature_c * 10.0f);

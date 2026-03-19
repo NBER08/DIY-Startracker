@@ -5,13 +5,15 @@
 // Everything else in the system either starts it, stops it, or
 // nudges it slightly faster/slower.
 
-// Call once at startup
 void motor_begin();
 
-// Start spinning at the sidereal rate (the default)
 void motor_start_tracking();
 
-// Stop the motor completely
 void motor_stop();
 
 uint64_t motor_get_step_count();   // added so main.cpp can report steps
+
+// Slew the polar axis by a signed number of steps at a fast rate.
+// Positive = forward (east), negative = backward (west).
+// Blocking — used during camera pointing before resuming tracking.
+void motor_slew_steps(int64_t steps);

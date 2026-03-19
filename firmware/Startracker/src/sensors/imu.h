@@ -25,5 +25,4 @@ CameraOrientation  imu_get_camera();
 // Tracking drift: how far the camera yaw has moved since tracking started.
 // Returns 0.0 while not tracking. Call imu_reset_tracking_reference()
 // when tracking starts so drift is measured from that moment.
-float imu_get_tracking_error_deg();
 void  imu_reset_tracking_reference();

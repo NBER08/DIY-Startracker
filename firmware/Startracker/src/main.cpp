@@ -3,8 +3,12 @@
 #include "sensors/gps.h"
 #include "sensors/imu.h"
 #include "sensors/bme.h"
+#include "sensors/tof.h"
 #include "motor/motor.h"
+#include "motor/slew.h"
+#include "motor/astro.h"
 #include "comms/lora.h"
+
 
 #define SIMULATE_HARDWARE  1
 
@@ -194,7 +198,7 @@ void loop() {
     unsigned long now = millis();
     if (now - last_status > STATUS_INTERVAL_MS) {
         last_status = now;
-        Serial.printf("steps=%llu  err=%.4f  sats=%d  temp=%.1fC  hum=%.1f%%  bat=%.2fV  %dma\n",
+        Serial.printf("steps=%llu sats=%d  temp=%.1fC  hum=%.1f%%  bat=%.2fV  %dma\n",
                       (unsigned long long)motor_get_step_count(),
                       fix.satellites,
                       get_temperature(),
@@ -208,7 +212,6 @@ void loop() {
         last_lora = now;
         float hum = get_humidity();
         LoraStatus s;
-        s.tracking_error    = 0;
         s.is_tracking       = is_tracking;
         s.gps_satellites    = fix.satellites;
         s.gps_valid         = fix.valid;

@@ -22,7 +22,6 @@ typedef struct {
 // Status packet sent by the tracker every 5 seconds
 typedef struct {
     // Tracking
-    float   tracking_error;    // IMU drift error in degrees
     bool    is_tracking;
 
     // GPS
