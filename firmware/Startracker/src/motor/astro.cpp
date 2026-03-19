@@ -1,166 +1,93 @@
 #include "astro.h"
-#include "config.h"
 #include <math.h>
 
-// =============================================================================
-//  Astronomical coordinate math
-//
-//  This file is pure math. No Wire, no Serial, no Arduino.h.
-//  You could compile and test it on a PC with just gcc.
-//
-//  THE CHAIN OF CALCULATIONS:
-//
-//  UTC time
-//    → Julian Date        (a single number counting days since 4713 BC)
-//    → Sidereal Time      (which part of the sky is overhead right now)
-//    → Hour Angle         (how far Polaris has rotated from your meridian)
-//    → Altitude + Azimuth (finally: where to physically point)
-//
-//  Each step is one simple formula. Work through them in order.
-// =============================================================================
+// Polaris position (J2000)
+#define POLARIS_RA_HRS  2.5303
+#define POLARIS_DEC_DEG 89.2641
 
-// Shorthand
-#define DEG2RAD(d)  ((d) * M_PI / 180.0)
-#define RAD2DEG(r)  ((r) * 180.0 / M_PI)
+static double deg2rad(double d) { return d * M_PI / 180.0; }
+static double rad2deg(double r) { return r * 180.0 / M_PI; }
 
-// Wrap an angle into [0, 360)
 static double wrap360(double d) {
     d = fmod(d, 360.0);
-    if (d < 0.0) d += 360.0;
-    return d;
+    return (d < 0) ? d + 360.0 : d;
 }
 
-// Wrap an angle into [-180, 180]
-static double wrap180(double d) {
-    d = fmod(d, 360.0);
-    if (d >  180.0) d -= 360.0;
-    if (d < -180.0) d += 360.0;
-    return d;
-}
-
-// =============================================================================
-//  Step 1: Unix time → Julian Date
-//
-//  Julian Date is just a continuous day count since noon, 1 Jan 4713 BC.
-//  Astronomers use it because it has no months, years, or time zones —
-//  just a single increasing decimal number.
-//
-//  The Unix epoch (1 Jan 1970 00:00 UTC) = JD 2440587.5
-//  So we just divide unix seconds by 86400 and add that offset.
-// =============================================================================
+// Julian date from unix timestamp
 static double unix_to_jd(long unix_sec) {
-    return 2440587.5 + (double)unix_sec / 86400.0;
+    return 2440587.5 + unix_sec / 86400.0;
 }
 
-// =============================================================================
-//  Step 2: Julian Date → Greenwich Mean Sidereal Time (GMST)
-//
-//  Sidereal time is like a clock that tracks Earth's rotation relative
-//  to the stars (not the Sun). It tells you which part of the sky is
-//  directly overhead at Greenwich right now.
-//
-//  The formula comes from the IAU standard. T is Julian centuries
-//  since J2000.0 (1 Jan 2000, 12:00 UTC = JD 2451545.0).
-// =============================================================================
-static double jd_to_gmst_deg(double jd) {
-    double T = (jd - 2451545.0) / 36525.0;   // centuries since J2000.0
-    double gmst = 280.46061837
-                + 360.98564736629 * (jd - 2451545.0)  // Earth rotates ~361°/day
-                + T * T * 0.000387933
-                - T * T * T / 38710000.0;
-    return wrap360(gmst);
+// Greenwich Mean Sidereal Time in degrees
+static double gmst_deg(double jd) {
+    double T = (jd - 2451545.0) / 36525.0;
+    double g = 280.46061837
+             + 360.98564736629 * (jd - 2451545.0)
+             + T * T * 0.000387933
+             - T * T * T / 38710000.0;
+    return wrap360(g);
 }
 
-// =============================================================================
-//  Step 3: GMST + your longitude → Local Sidereal Time (LST)
-//
-//  GMST is sidereal time at longitude 0° (Greenwich).
-//  For Pécs at 18.23°E, the sky has rotated 18.23° further eastward,
-//  so your local sidereal time is GMST + 18.23°.
-// =============================================================================
-static double gmst_to_lst(double gmst_deg, double lon_deg) {
-    return wrap360(gmst_deg + lon_deg);
+double astro_lst_deg(double lon_deg, long unix_sec) {
+    return wrap360(gmst_deg(unix_to_jd(unix_sec)) + lon_deg);
 }
 
-// =============================================================================
-//  Step 4: LST + Polaris RA → Hour Angle
-//
-//  Right Ascension (RA) is a star's fixed east-west position in the sky,
-//  measured in hours (0h to 24h). It doesn't change as Earth rotates.
-//
-//  Hour Angle = how far the star has "moved" west of your meridian today.
-//  When HA = 0, the star is exactly due south at its highest point.
-//  When HA = 6h (90°), it has moved 6 hours west of there.
-//
-//  HA = LST - RA (both in degrees)
-// =============================================================================
-static double get_hour_angle_deg(double lst_deg, double ra_hrs) {
-    double ra_deg = ra_hrs * 15.0;   // hours → degrees (24h × 15 = 360°)
-    return wrap180(lst_deg - ra_deg);
+// Hour angle of an object given LST and RA
+static double hour_angle_deg(double lst_deg, double ra_hours) {
+    double ha = lst_deg - ra_hours * 15.0;
+    // Wrap to -180..+180
+    ha = fmod(ha, 360.0);
+    if (ha >  180.0) ha -= 360.0;
+    if (ha < -180.0) ha += 360.0;
+    return ha;
 }
 
-// =============================================================================
-//  Step 5: Hour Angle + Declination + Latitude → Altitude + Azimuth
-//
-//  This is the standard "equatorial to horizontal" coordinate transform.
-//  It converts from sky coordinates (RA/Dec) to local coordinates (Alt/Az).
-//
-//  Declination = star's fixed north-south position (like latitude in the sky)
-//  Latitude    = your geographic latitude
-//  Hour Angle  = how far the star is from your meridian (from Step 4)
-// =============================================================================
-static void equatorial_to_altaz(double ha_deg, double dec_deg, double lat_deg,
-                                 double *alt_out, double *az_out) {
-    double ha  = DEG2RAD(ha_deg);
-    double dec = DEG2RAD(dec_deg);
-    double lat = DEG2RAD(lat_deg);
+// Equatorial (HA, Dec) → Horizontal (Alt, Az)
+static void eq_to_horiz(double ha_deg, double dec_deg, double lat_deg,
+                         double *alt, double *az) {
+    double ha  = deg2rad(ha_deg);
+    double dec = deg2rad(dec_deg);
+    double lat = deg2rad(lat_deg);
 
-    // Altitude: how high above the horizon
-    double sin_alt = sin(dec) * sin(lat)
-                   + cos(dec) * cos(lat) * cos(ha);
-    *alt_out = RAD2DEG(asin(sin_alt));
+    double sin_alt = sin(dec)*sin(lat) + cos(dec)*cos(lat)*cos(ha);
+    *alt = rad2deg(asin(sin_alt));
 
-    // Azimuth: compass bearing
-    double cos_az = (sin(dec) - sin(*alt_out * M_PI / 180.0) * sin(lat))
-                  / (cos(*alt_out * M_PI / 180.0) * cos(lat));
-
-    // Clamp to avoid floating-point acos domain errors
-    if (cos_az >  1.0) cos_az =  1.0;
-    if (cos_az < -1.0) cos_az = -1.0;
-
-    *az_out = RAD2DEG(acos(cos_az));
-
-    // acos always returns 0–180°.
-    // If the hour angle is positive (star is west of meridian),
-    // the azimuth must be in the 180–360° range.
-    if (sin(ha) > 0.0) *az_out = 360.0 - *az_out;
+    double cos_az = (sin(dec) - sin(*alt * M_PI / 180.0) * sin(lat))
+                  / (cos(*alt * M_PI / 180.0) * cos(lat));
+    cos_az = fmax(-1.0, fmin(1.0, cos_az));   // clamp floating point noise
+    *az = rad2deg(acos(cos_az));
+    if (sin(ha) > 0.0) *az = 360.0 - *az;
 }
 
-// =============================================================================
-//  Public API
-// =============================================================================
+PoleDirection astro_get_pole(double lat_deg, double lon_deg, long unix_sec) {
+    double lst  = astro_lst_deg(lon_deg, unix_sec);
+    double ha   = hour_angle_deg(lst, POLARIS_RA_HRS);
+    double alt, az;
+    eq_to_horiz(ha, POLARIS_DEC_DEG, lat_deg, &alt, &az);
 
-PoleDirection astro_get_pole(double lat, double lon, long unix_sec) {
-    // Walk through the five steps
-    double jd  = unix_to_jd(unix_sec);
-    double gmst = jd_to_gmst_deg(jd);
-    double lst  = gmst_to_lst(gmst, lon);
-    double ha   = get_hour_angle_deg(lst, POLARIS_RA_HRS);
-
-    PoleDirection result;
-    equatorial_to_altaz(ha, POLARIS_DEC_DEG, lat,
-                        &result.altitude_deg, &result.azimuth_deg);
-    return result;
+    // The platform altitude should equal the observer's latitude.
+    // alt_correction tells the user how much to tilt manually
+    // to reach that from the current IMU-measured tilt.
+    // (Current tilt is read in main.cpp — we just return the target here.)
+    PoleDirection p;
+    p.pole_alt_deg       = alt;
+    p.pole_az_deg        = az;
+    p.alt_correction_deg = 0.0;   // filled in by main.cpp using IMU reading
+    return p;
 }
 
-float astro_total_error_deg(PoleDirection target,
-                            float current_az, float current_alt) {
-    // Angular distance between two points on a sphere.
-    // This is the straight-line angle between where we're pointing
-    // and where we need to point — accounts for both az and alt error.
-    double az_err  = DEG2RAD(target.azimuth_deg  - current_az);
-    double alt_err = DEG2RAD(target.altitude_deg - current_alt);
+CameraTarget astro_radec_to_motors(double lat_deg, double lon_deg, long unix_sec,
+                                    double ra_hours, double dec_deg) {
+    double lst = astro_lst_deg(lon_deg, unix_sec);
+    double ha  = hour_angle_deg(lst, ra_hours);
 
-    // Pythagorean approximation — valid for small angles (< 5°)
-    return (float)RAD2DEG(sqrt(az_err * az_err + alt_err * alt_err));
+    // Polar distance = angular separation from the celestial pole.
+    // When polar_dist = 0 the camera points at the pole.
+    // When polar_dist = 90 the camera points at the celestial equator.
+    double polar_dist = 90.0 - dec_deg;
+
+    CameraTarget t;
+    t.ha_deg         = ha;
+    t.polar_dist_deg = polar_dist;
+    return t;
 }

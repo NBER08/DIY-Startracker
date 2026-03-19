@@ -60,10 +60,25 @@ static float cal_offset_y = 0.0f;
 // ---- Motor (TMC2209) ----
 #define STEP_PIN     6
 #define DIR_PIN      7
-
 #define MOTOR_STEPS  200    // steps per motor revolution
 #define MICROSTEP    16     // TMC2209 microstepping setting
 #define GEAR_RATIO   144    // worm gear output ratio
+
+// ---- Azimuth + camera tilt motors via PCA9535 I2C expander ----
+// A0=A1=A2=GND → address 0x20
+// All motor pins on Port 0 (single register write moves both motors)
+//
+//  Port 0 bit → expander pin → TB6612FNG signal
+//  bit 0 → P0 → D2_A2   (azimuth motor)
+//  bit 1 → P1 → D2_A1
+//  bit 2 → P2 → D2_B1
+//  bit 3 → P3 → D2_B2
+//  bit 4 → P4 → D3_B2   (camera tilt motor)
+//  bit 5 → P5 → D3_B1
+//  bit 6 → P6 → D3_A1
+//  bit 7 → P7 → D3_A2
+#define EXPANDER_ADDR      0x20
+#define CAM_STEPS_PER_DEG  20.0f
 
 // ---- Astro ----
 #define POLARIS_RA_HRS   2.5303    // Right Ascension: 2 hours 31 minutes

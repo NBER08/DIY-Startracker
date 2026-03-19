@@ -51,10 +51,12 @@ static void trigger_shutter(uint8_t duration_sec) {
     Serial.println("Shutter: closed");
 }
 
-static float get_temperature()  { return 14.5f;    }
-static float get_humidity()     { return 68.0f;    }
-static float get_battery_mv()   { return 11800.0f; }
-static float get_current_ma()   { return 420.0f;   }
+// ---- Stub sensor reads — replace with real BME280/INA219 calls ----
+static float get_temperature() { return 14.5f;    }
+static float get_humidity()    { return 68.0f;    }
+static float get_battery_mv()  { return 11800.0f; }
+static float get_current_ma()  { return 420.0f;   }
+static float get_mag_az()      { return 5.0f;     }
 
 static void point_camera_at(double ra_hours, double dec_deg) {
     if (!last_fix.valid) {
@@ -133,97 +135,130 @@ void setup() {
         delay(1000);
     }
 
-    // --- Step 3: Start tracking ---
-    // At this point we have GPS (so we know where we are and what time it is).
-    // The motor knows its own sidereal rate from the compile-time constants.
-    // So we just start it — it will track at the correct rate immediately.
-    //
-    // In the full version, we would also:
-    //   - Auto-align the polar axis using the magnetometer
-    //   - start reading from sensors and start LoRa telemetry
-    // For now we assume you've manually pointed the polar axis at Polaris.
+    // Show the user the required platform altitude before starting
+    PoleDirection pole = astro_get_pole(last_fix.lat, last_fix.lon, last_fix.unix_sec);
+    TofReading    tof  = tof_read();
+    Serial.printf("Required platform altitude: %.2f°\n", pole.pole_alt_deg);
+    Serial.printf("Current platform altitude:  %.2f° (ToF: %.1f mm)\n",
+                  tof.altitude_deg, tof.distance_mm);
+    Serial.printf("Adjust platform by hand:    %+.2f°\n",
+                  (float)pole.pole_alt_deg - tof.altitude_deg);
 
+    imu_reset_tracking_reference();
     motor_start_tracking();
     is_tracking = true;
-    Serial.println("Tracking started. Check the stars!");
+    Serial.println("Tracking started.");
 }
 
+// -------------------------------------------------------------------------
+// loop
+// -------------------------------------------------------------------------
 void loop() {
-    // --- Step 4: Correction loop ---
-    // This runs continuously. Every iteration:
-    //   - Read the GPS (keeps the time fresh)
-    //   - Read both IMUs
-    //   - If the camera has drifted, nudge the motor
-
     static unsigned long last_status = 0;
     static unsigned long last_lora   = 0;
 
-    GpsFix  fix    = gps_read();
-    ImuData mount  = imu_get_mount();
-    ImuData camera = imu_get_camera();
+    last_fix = gps_read();
 
-    // Read sensors
-    GpsFix fix    = gps_read();
-    ImuData mount  = imu_get_mount();
-    ImuData camera = imu_get_camera();
-    BmeData bme    = bme_read();
+    // Sensors
+    CameraOrientation cam = imu_get_camera();
+    TofReading        tof = tof_read();
 
-        // LoRa command handler
+    // Azimuth slew
+    if (is_slewing_az) {
+        bool done = slew_az_toward(target_az, get_mag_az());
+        if (done) { is_slewing_az = false; Serial.println("Az slew done"); }
+    }
+
+    // Pole direction + altitude correction
+    PoleDirection pole = {};
+    if (last_fix.valid) {
+        pole = astro_get_pole(last_fix.lat, last_fix.lon, last_fix.unix_sec);
+        // Altitude correction: how far off the ToF-measured angle is from required
+        if (tof.valid) {
+            pole.alt_correction_deg = (float)pole.pole_alt_deg - tof.altitude_deg;
+        }
+    }
+
+    // LoRa commands
     LoraCmdPacket pkt = lora_get_command();
     switch (pkt.cmd) {
         case CMD_START:
             if (!is_tracking) {
+                imu_reset_tracking_reference();
                 motor_start_tracking();
                 is_tracking = true;
             }
             break;
         case CMD_STOP:
-            if (is_tracking) {
-                motor_stop();
-                is_tracking = false;
-            }
+            if (is_tracking) { motor_stop(); is_tracking = false; }
             break;
         case CMD_SHUTTER:
-            // pkt.param = exposure duration in seconds sent by the controller
-            trigger_shutter(pkt.param);
+            trigger_shutter(pkt.param_hi);
             break;
         case CMD_PING:
-            Serial.println("LoRa: ping received");
+            Serial.println("LoRa: ping");
+            break;
+        case CMD_POINT_RA:
+            target_ra_hrs = pkt.param_hi + (pkt.param_lo / 60.0);
+            Serial.printf("LoRa: target RA=%.3fh\n", target_ra_hrs);
+            break;
+        case CMD_POINT_DEC: {
+            double dec = (int8_t)(pkt.param_hi - 128) + pkt.param_lo / 60.0;
+            point_camera_at(target_ra_hrs, dec);
+            break;
+        }
+        case CMD_SLEW_AZ:
+            if (last_fix.valid) {
+                target_az    = (float)pole.pole_az_deg;
+                is_slewing_az = true;
+                Serial.printf("LoRa: slewing az → %.1f°\n", target_az);
+            }
             break;
         default:
             break;
     }
 
-    // Serial status
     unsigned long now = millis();
+
+    // Serial status
     if (now - last_status > STATUS_INTERVAL_MS) {
         last_status = now;
-        Serial.printf("steps=%llu sats=%d  temp=%.1fC  hum=%.1f%%  bat=%.2fV  %dma\n",
-                      (unsigned long long)motor_get_step_count(),
-                      fix.satellites,
-                      get_temperature(),
-                      get_humidity(),
-                      get_battery_mv() / 1000.0f,
-                      (int)get_current_ma());
+        Serial.printf(
+            "tof=%.1fmm plat_alt=%.2f° alt_corr=%+.2f° "
+            "cam_az=%.1f° cam_alt=%.1f° "
+            "steps=%llu "
+            "T=%.1fC H=%.0f%% bat=%.2fV %dma\n",
+            tof.distance_mm,
+            tof.valid ? tof.altitude_deg : 0.0f,
+            pole.alt_correction_deg,
+            cam.valid ? cam.az_deg  : 0.0f,
+            cam.valid ? cam.alt_deg : 0.0f,
+            (unsigned long long)motor_get_step_count(),
+            get_temperature(), get_humidity(),
+            get_battery_mv() / 1000.0f, (int)get_current_ma()
+        );
     }
 
-    // LoRa status broadcast
+    // LoRa broadcast
     if (now - last_lora > LORA_INTERVAL_MS) {
         last_lora = now;
         float hum = get_humidity();
-        LoraStatus s;
-        s.is_tracking       = is_tracking;
-        s.gps_satellites    = fix.satellites;
-        s.gps_valid         = fix.valid;
-        s.temperature_c     = get_temperature();
-        s.humidity_pct      = hum;
-        s.humidity_warning  = (hum > HUMIDITY_WARN_PCT);
-        s.battery_mv        = get_battery_mv();
-        s.current_ma        = get_current_ma();
-        s.rssi              = 0;
+        LoraStatus s = {};
+        s.is_tracking        = is_tracking;
+        s.gps_satellites     = last_fix.satellites;
+        s.gps_valid          = last_fix.valid;
+        s.pole_az_deg        = (float)pole.pole_az_deg;
+        s.current_az_deg     = get_mag_az();
+        s.alt_correction_deg = pole.alt_correction_deg;
+        s.camera_tilt_deg    = camera_get_tilt_deg();
+        s.temperature_c      = get_temperature();
+        s.humidity_pct       = hum;
+        s.humidity_warning   = (hum > HUMIDITY_WARN_PCT);
+        s.battery_mv         = get_battery_mv();
+        s.current_ma         = get_current_ma();
+        s.rssi               = 0;
         lora_send_status(s);
     }
 
-    // Small delay to avoid hammering the I2C bus
     delay(50);
 }

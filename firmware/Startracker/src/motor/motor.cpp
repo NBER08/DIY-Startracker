@@ -11,6 +11,8 @@
 #define TOTAL_STEPS   ((uint64_t)MOTOR_STEPS * MICROSTEP * GEAR_RATIO)
 #define STEP_PERIOD_US (SIDEREAL_US / TOTAL_STEPS)
 
+#define SLEW_PERIOD_US (STEP_PERIOD_US / 10)
+
 // ---- State ----
 static hw_timer_t       *step_timer = NULL;
 static volatile uint64_t step_count = 0;
@@ -18,6 +20,7 @@ static volatile uint64_t step_count = 0;
 // This is the period the timer is currently using.
 // We adjust it slightly when applying IMU correction.
 static volatile uint64_t current_period_us = STEP_PERIOD_US;
+
 
 // -------------------------------------------------------------------------
 // THE ISR — this runs every ~93.5ms, triggered by the hardware timer.
@@ -76,6 +79,8 @@ void motor_begin() {
 
 void motor_start_tracking() {
     step_count = 0;
+    digitalWrite(DIR_PIN, LOW);   // forward = sidereal east
+    timerAlarm(step_timer, STEP_PERIOD_US, true, 0);
     timerStart(step_timer);
     Serial.println("Motor: tracking started");
 }

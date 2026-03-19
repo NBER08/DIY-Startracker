@@ -4,7 +4,6 @@
 #include <RadioLib.h>
 
 // ---- RadioLib SX1261 instance ----
-// Pins: CS, DIO1, RST, BUSY — all defined in config.h
 static SX1261 radio = new Module(LORA_CS, LORA_DIO1, LORA_RST, LORA_BUSY);
 
 // Flag set by the DIO1 interrupt when a packet arrives.
@@ -42,10 +41,7 @@ void lora_begin() {
 
     // Tell RadioLib to call radio_isr when a packet arrives on DIO1
     radio.setDio1Action(radio_isr);
-
-    // Start listening for incoming packets
     radio.startReceive();
-
     Serial.printf("LoRa: ready at %.1f MHz  TX=%d dBm\n",
                   (double)LORA_FREQ, LORA_TX_DBM);
 }
@@ -55,26 +51,24 @@ void lora_begin() {
 // Returns the received command, or CMD_NONE if nothing arrived.
 // -------------------------------------------------------------------------
 LoraCmdPacket lora_get_command() {
-    LoraCmdPacket none = { CMD_NONE, 0 };
+    LoraCmdPacket none = { CMD_NONE, 0, 0 };
     if (!packet_received) return none;
     packet_received = false;
 
-    // Packet format: [cmd, param, 0x00, 0x00]
     uint8_t buf[4] = {};
     int state = radio.readData(buf, sizeof(buf));
     radio.startReceive();
-
     if (state != RADIOLIB_ERR_NONE) return none;
 
     last_rssi = (int16_t)radio.getRSSI();
 
     LoraCmd cmd = (LoraCmd)buf[0];
-    if (cmd < CMD_START || cmd > CMD_PING) return none;
+    if (cmd == CMD_NONE || cmd > CMD_SLEW_AZ) return none;
 
-    Serial.printf("LoRa: cmd=0x%02X param=%d RSSI=%d dBm\n",
-                  cmd, buf[1], last_rssi);
+    Serial.printf("LoRa RX: cmd=0x%02X p_hi=%d p_lo=%d RSSI=%d\n",
+                  cmd, buf[1], buf[2], last_rssi);
 
-    LoraCmdPacket pkt = { cmd, buf[1] };
+    LoraCmdPacket pkt = { cmd, buf[1], buf[2] };
     return pkt;
 }
 
@@ -82,53 +76,58 @@ LoraCmdPacket lora_get_command() {
 // lora_send_status — transmit a status packet to the controller
 // -------------------------------------------------------------------------
 void lora_send_status(const LoraStatus &s) {
-    // Pack everything into 16 bytes
-    uint8_t buf[16] = {};
+    uint8_t buf[22] = {};
 
-    buf[0]  = 0xAB;                                      // magic
+    buf[0] = 0xAB;   // magic
 
-    buf[1]  = (s.is_tracking      ? 0x01 : 0x00)
-            | (s.gps_valid        ? 0x02 : 0x00)
-            | (s.humidity_warning ? 0x04 : 0x00);        // flags byte
+    // Flags byte
+    buf[1] = (s.is_tracking      ? 0x01 : 0)
+           | (s.gps_valid        ? 0x02 : 0)
+           | (s.humidity_warning ? 0x04 : 0);
 
-    buf[2]  = (uint8_t)s.gps_satellites;
+    buf[2] = (uint8_t)s.gps_satellites;
 
-    // tracking error — store as degrees × 100, signed 16-bit
-    int16_t err = (int16_t)(0);  // Replace 0 with actual tracking error value if available
-    buf[3]  = (uint8_t)("#");
-    buf[4]  = (uint8_t)("#");
+    // Pole azimuth — degrees × 10, unsigned 16-bit
+    uint16_t paz = (uint16_t)(s.pole_az_deg * 10.0f);
+    buf[3] = paz >> 8;  buf[4] = paz & 0xFF;
 
-    // temperature — degrees C × 10, signed 16-bit  (e.g. 15.3°C → 153)
+    // Current platform azimuth — degrees × 10
+    uint16_t caz = (uint16_t)(s.current_az_deg * 10.0f);
+    buf[5] = caz >> 8;  buf[6] = caz & 0xFF;
+
+    // Altitude correction — degrees × 10, signed 16-bit
+    // positive = tilt up, negative = tilt down
+    int16_t alt_corr = (int16_t)(s.alt_correction_deg * 10.0f);
+    buf[7]  = alt_corr >> 8;  buf[8] = alt_corr & 0xFF;
+
+    // Camera tilt angle — degrees × 10
+    uint16_t ctilt = (uint16_t)(s.camera_tilt_deg * 10.0f);
+    buf[9] = ctilt >> 8;  buf[10] = ctilt & 0xFF;
+
+    // Temperature — degrees × 10, signed 16-bit
     int16_t temp = (int16_t)(s.temperature_c * 10.0f);
-    buf[5]  = (uint8_t)(temp >> 8);
-    buf[6]  = (uint8_t)(temp & 0xFF);
-
-    // humidity — percent × 10, unsigned 16-bit  (e.g. 65.4% → 654)
+    buf[11] = temp >> 8;  buf[12] = temp & 0xFF;
+    // Humidity — percent × 10
     uint16_t hum = (uint16_t)(s.humidity_pct * 10.0f);
-    buf[7]  = (uint8_t)(hum >> 8);
-    buf[8]  = (uint8_t)(hum & 0xFF);
+    buf[13] = hum >> 8;  buf[14] = hum & 0xFF;
 
-    // battery voltage — millivolts, unsigned 16-bit  (e.g. 11800 mV)
+    // Battery voltage — millivolts
     uint16_t mv = (uint16_t)s.battery_mv;
-    buf[9]  = (uint8_t)(mv >> 8);
-    buf[10] = (uint8_t)(mv & 0xFF);
-
-    // current draw — milliamps, unsigned 16-bit
+    buf[15] = mv >> 8;  buf[16] = mv & 0xFF;
+    // Current draw — milliamps
     uint16_t ma = (uint16_t)s.current_ma;
-    buf[11] = (uint8_t)(ma >> 8);
-    buf[12] = (uint8_t)(ma & 0xFF);
+    buf[17] = ma >> 8;  buf[18] = ma & 0xFF;
 
     // RSSI of last received packet
-    buf[13] = (uint8_t)(last_rssi >> 8);
-    buf[14] = (uint8_t)(last_rssi & 0xFF);
+    buf[19] = last_rssi >> 8;  buf[20] = last_rssi & 0xFF;
 
-    // buf[15] reserved
+    // buf[21] reserved
 
     radio.standby();
     int state = radio.transmit(buf, sizeof(buf));
     radio.startReceive();
 
     if (state != RADIOLIB_ERR_NONE) {
-        Serial.printf("LoRa: transmit failed (error %d)\n", state);
+        Serial.printf("LoRa TX failed (%d)\n", state);
     }
 }

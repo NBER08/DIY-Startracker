@@ -1,39 +1,36 @@
 #pragma once
-#include "astro.h"
-#include "sensors/mag.h"
-#include "sensors/imu.h"
 
 // =============================================================================
-//  slew.h — move the tracker to face the celestial pole
+//  slew.h — platform azimuth slew and camera altitude motor
 //
-//  Hardware:
-//    PCA9535  — I2C I/O expander (address 0x20)
-//               Turns one I2C wire into 16 GPIO output pins
-//    TB6612FNG — dual H-bridge motor driver (×2, one per axis)
-//               Converts logic-level signals into actual motor current
-//
-//  Two axes:
-//    AZIMUTH  — rotates the tracker left/right to face north
-//    ALTITUDE — tilts the tracker up/down to match your latitude
-//
-//  The slew motors are only used during alignment.
-//  Once aligned they stop and the tracking motor takes over.
+//  The platform altitude is set by hand — no motor for it.
+//  This module controls:
+//    1. Platform azimuth motor  — rotates the whole mount to face north
+//    2. Camera altitude motor   — tilts only the camera to point at a target
 // =============================================================================
 
-// How close is "close enough" to stop slewing (degrees)
-#define SLEW_TOLERANCE_DEG   0.5f
+// ---- Platform azimuth ----
 
-// Slew to the pole using all available sensor feedback.
-// Blocks until aligned or timeout.
-// Returns true if alignment succeeded within tolerance.
-bool slew_to_pole(PoleDirection target, int timeout_sec);
-
-// Move one axis by a small fixed amount — useful for manual nudging
-void slew_az_nudge(bool clockwise);
-void slew_alt_nudge(bool upward);
-
-// Stop all motors immediately
-void slew_stop();
-
-// Call once at startup
 void slew_begin();
+
+// Rotate the platform toward target_az_deg.
+// current_az_deg comes from the magnetometer.
+// Moves in small steps and returns — call repeatedly from loop() until done.
+// Returns true when within tolerance.
+bool slew_az_toward(float target_az_deg, float current_az_deg,
+                    float tolerance_deg = 0.5f);
+
+// Stop azimuth motor and de-energise (saves power, holds by friction)
+void slew_az_stop();
+
+// ---- Camera altitude motor ----
+// Tilts the camera relative to the polar axis.
+// angle_deg: polar distance from the pole (0 = pointing at pole, 90 = equator)
+// This is a blocking move — it runs to completion before returning.
+void camera_tilt_to(float angle_deg);
+
+// Current camera tilt angle (tracked by step count, not a sensor)
+float camera_get_tilt_deg();
+
+// Stop camera motor
+void camera_tilt_stop();
