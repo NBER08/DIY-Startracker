@@ -14,9 +14,23 @@
 #define I2C_SDA      8
 #define I2C_SCL      9
 
-// ---- BNO085 IMU addresses ----
-#define IMU_ADDR_MOUNT   0x4A   // PS1 = LOW
-#define IMU_ADDR_CAMERA  0x4B   // PS1 = HIGH
+// ---- BNO085 — camera only (one sensor now) ----
+#define IMU_ADDR_CAMERA  0x4A
+
+// ---- VL53L4CD ToF distance sensor ----
+// Mounted on the base platform, beam pointing toward the tilting platform.
+// Used to calculate platform altitude angle.
+#define TOF_ADDR         0x29   // default I2C address, not changeable
+
+// Calibration — measure these physically on your build:
+//   TOF_FLAT_MM   : reading (mm) when the platform is perfectly horizontal (0°)
+//   TOF_ARM_MM    : horizontal distance (mm) from the sensor beam
+//                   to the platform hinge/pivot point
+//
+// Geometry:  altitude_deg = atan( (reading - TOF_FLAT_MM) / TOF_ARM_MM )
+// Set both to 1.0 as placeholders until you can measure them.
+#define TOF_FLAT_MM      120.0f   // replace with your measured value
+#define TOF_ARM_MM       80.0f    // replace with your measured value
 
 // ---- Magnetometer (I2C) ----
 #define MAG_ADDR      0x1E    // SA0 pin tied LOW on your board

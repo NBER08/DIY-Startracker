@@ -14,6 +14,10 @@
 #define HUMIDITY_WARN_PCT    80.0f
 
 static bool is_tracking = false;
+static bool    is_slewing_az = false;
+static float   target_az     = 0.0f;
+static double  target_ra_hrs = 0.0;
+static GpsFix  last_fix      = {};
 
 // =========================================================================
 //  STAR TRACKER — simplified main program
@@ -48,6 +52,45 @@ static float get_humidity()     { return 68.0f;    }
 static float get_battery_mv()   { return 11800.0f; }
 static float get_current_ma()   { return 420.0f;   }
 
+static void point_camera_at(double ra_hours, double dec_deg) {
+    if (!last_fix.valid) {
+        Serial.println("Point: no GPS fix");
+        return;
+    }
+
+    CameraTarget target = astro_radec_to_motors(
+        last_fix.lat, last_fix.lon, last_fix.unix_sec,
+        ra_hours, dec_deg
+    );
+
+    Serial.printf("Point: RA=%.2fh Dec=%.1f° → HA=%.1f° polar_dist=%.1f°\n",
+                  ra_hours, dec_deg, target.ha_deg, target.polar_dist_deg);
+
+    bool was_tracking = is_tracking;
+    if (was_tracking) { motor_stop(); is_tracking = false; }
+
+    // Slew polar axis to hour angle position
+    uint64_t steps_per_rev = (uint64_t)MOTOR_STEPS * MICROSTEP * GEAR_RATIO;
+    int64_t  steps = (int64_t)(target.ha_deg / 360.0 * steps_per_rev);
+    motor_slew_steps(steps);
+
+    // Tilt camera to polar distance
+    camera_tilt_to((float)target.polar_dist_deg);
+
+    // Verify with BNO085 on camera
+    CameraOrientation cam = imu_get_camera();
+    if (cam.valid) {
+        Serial.printf("Point: camera now at az=%.1f° alt=%.1f°\n",
+                      cam.az_deg, cam.alt_deg);
+    }
+
+    if (was_tracking) {
+        imu_reset_tracking_reference();   // reset drift reference from new position
+        motor_start_tracking();
+        is_tracking = true;
+    }
+}
+
 void setup() {
     Serial.begin(115200);
     delay(500);
@@ -59,8 +102,10 @@ void setup() {
     digitalWrite(FOCUS_PIN,   LOW);
 
     gps_begin();
-    imu_begin();
+    imu_begin();   // starts Wire — tof_begin() called after so bus is ready
+    tof_begin();
     motor_begin();
+    slew_begin();
     lora_begin();
     bme_begin();
 
