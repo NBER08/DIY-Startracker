@@ -29,7 +29,7 @@ static int read_line(int fd, char* buf, int maxlen, uint32_t timeout_ms) {
 
         char c;
         ssize_t n = read(fd, &c, 1);
-        if (n <= 0) continue;   // VTIME handles short blocking, just retry
+        if (n <= 0) continue;
 
         buf[pos++] = c;
         if (pos >= 2 && buf[pos-2] == '\r' && buf[pos-1] == '\n') {

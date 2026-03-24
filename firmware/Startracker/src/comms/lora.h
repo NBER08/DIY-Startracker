@@ -12,9 +12,9 @@ typedef enum {
     CMD_STOP             = 0x02,
     CMD_SHUTTER          = 0x03,
     CMD_PING             = 0x04,
-    CMD_POINT_RA         = 0x05,
-    CMD_POINT_DEC        = 0x06,
-    CMD_SLEW_AZ          = 0X07,
+    CMD_SLEW_ALT         = 0x05,
+    CMD_SLEW_AZ          = 0x06,
+    CMD_SLEW_START       = 0x07,
 } LoraCmd;
 
 typedef struct {
