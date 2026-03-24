@@ -1,4 +1,5 @@
 #pragma once
+#include "protocol.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -11,7 +12,7 @@
 typedef struct {
     int8_t  rssi;
     int8_t  snr;
-    uint8_t payload;
+    uint8_t payload[255];
     uint8_t payload_len;
 } LoraPacket_t;
 
@@ -24,28 +25,7 @@ typedef struct {
     const char* sync_word; 
 } LoraConfig_t;
 
-typedef struct {
-    bool is_tracking;
 
-    int gps_sattelites;
-
-    int temp;
-    int hum;
-    bool hum_warning;
-
-    float pole_az_deg;
-    float current_az_deg;
-    float alt_correction_deg;
-
-    float current_camera_az;
-    float current_camera_alt;
-    bool is_on_target;
-
-    float   battery_mv;
-    float   current_ma;
-
-    int16_t rssi;
-} LoraStatus;
 
 void  lora_init(const char* port, const LoraConfig_t* cfg, bool config);
 
@@ -54,10 +34,18 @@ int  lora_configure(int fd, const LoraConfig_t* cfg);
 
 // Returns true if a new status packet arrived since the last call.
 // Fills out_status with the decoded values.
-bool lora_get_status(LoraStatus *out_status);
-
-void serialCheck(int fd);
+int  lora_recv(LoraPacket_t* out, uint32_t timeout_ms);
+int lora_recv_status(LoraStatus* out, uint32_t timeout_ms);
 
 int8_t lora_last_rssi(void);
 int8_t lora_last_snr(void);
 
+// Send a command packet to the tracker (4 bytes on air)
+void lora_send_cmd(LoraCmd cmd, uint8_t param_hi, uint8_t param_lo);
+
+// Convenience wrappers
+void lora_cmd_start(void);
+void lora_cmd_stop(void);
+void lora_cmd_ping(void);
+void lora_cmd_shutter(uint16_t duration_tenths);   // duration in 0.1s steps
+void lora_cmd_slew_az(uint16_t angle_tenths);     // degrees × 10

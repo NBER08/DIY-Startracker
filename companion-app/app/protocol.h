@@ -19,3 +19,25 @@ typedef struct {
     uint16_t param_lo;
 } LoraCmdPacket;
 
+typedef struct {
+    bool is_tracking;
+
+    int gps_sattelites;
+
+    int temp;
+    int hum;
+    bool hum_warning;
+
+    float pole_az_deg;
+    float current_az_deg;
+    float alt_correction_deg;
+
+    float current_camera_az;
+    float current_camera_alt;
+    bool is_on_target;
+
+    float   battery_mv;
+    float   current_ma;
+
+    int16_t rssi;
+} LoraStatus;
