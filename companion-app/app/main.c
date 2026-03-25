@@ -41,7 +41,7 @@ static void* recv_thread(void* arg) {
     return NULL;
 }
 
-
+ 
 LoraConfig_t cfg = {
     .frequency_hz = "radio set freq 868100000\r\n",
     .spreading_factor = "radio set sf sf7\r\n",
@@ -52,11 +52,12 @@ LoraConfig_t cfg = {
 };
 
 void main(void) {
-    lora_init("/dev/pts/3", &cfg, true);
+    lora_init("/dev/ttyACM0", &cfg, true);
 
     tui_init();
     tui_log("LoRa initialized — port /dev/ttyACM0");
 
+    
     pthread_t rx;
     pthread_create(&rx, NULL, recv_thread, NULL);
 

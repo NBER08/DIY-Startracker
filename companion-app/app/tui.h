@@ -9,4 +9,4 @@ void tui_update_status(const LoraStatus* s);
 void tui_log(const char* fmt, ...);
 
 typedef void (*CmdCallback)(const char* cmd);
-void tui_run(CmdCallback on_cmd);
+void tui_run(CmdCallback on_cmd); 

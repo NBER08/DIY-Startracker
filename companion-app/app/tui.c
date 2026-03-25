@@ -11,7 +11,7 @@
 
 #define LOG_LINES     6
 #define CMD_MAX_LEN   128
-#define COLOR_GOOD    1
+#define COLOR_GOOD    1 
 #define COLOR_WARN    2
 #define COLOR_BAD     3
 #define COLOR_DIM     4

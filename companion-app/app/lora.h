@@ -13,11 +13,11 @@ typedef struct {
     int8_t  rssi;
     int8_t  snr;
     uint8_t payload[255];
-    uint8_t payload_len;
+    uint8_t payload_len; 
 } LoraPacket_t;
 
 typedef struct {
-    const char* frequency_hz;   // e.g. 868100000
+    const char* frequency_hz;   // e.g. 868100000 
     const char* spreading_factor; // 7–12
     const char* bandwidth_hz;   // 125000
     const char* tx_power_dbm;   // up to +18 for WLR089U0, but 14 is the max legal on 868.1

@@ -22,6 +22,7 @@ int main(void) {
 
 	const char* msg = "sys reset";
 	write(fd, msg, strlen(msg));
+	printf("sent: %s\n", msg);
 
 	// Read a response
 	char buf[256] = {0};
