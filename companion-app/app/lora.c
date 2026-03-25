@@ -1,5 +1,7 @@
 #include "lora.h"
 #include <sys/time.h> 
+#include <stdlib.h>
+
 #define SERIAL_RX_BUF_SIZE  256  // max message size
 
 static int8_t last_rssi = 0, last_snr = 0;
@@ -198,3 +200,30 @@ void lora_cmd_stop(void)                         { lora_send_cmd(CMD_STOP,    0,
 void lora_cmd_ping(void)                         { lora_send_cmd(CMD_PING,    0, 0); }
 void lora_cmd_shutter(uint16_t duration_tenths)   { lora_send_cmd(CMD_SHUTTER, duration_tenths >> 8, duration_tenths & 0xFF); }
 void lora_cmd_slew_az(uint16_t angle_tenths)     { lora_send_cmd(CMD_SLEW_AZ, angle_tenths >> 8, angle_tenths & 0xFF); }
+
+int lora_recv_status(LoraStatus* out, uint32_t timeout_ms) {
+    LoraPacket_t pkt;
+    if (lora_recv(&pkt, timeout_ms) != 0) return -1;
+    if (pkt.payload_len < 23)             return -1;
+    if (pkt.payload[0] != 0xAB)          return -1;  // magic check
+
+    uint8_t* b = pkt.payload;
+
+    out->is_tracking    = (b[1] & 0x01) != 0;
+    out->is_on_target   = (b[1] & 0x02) != 0;
+    out->hum_warning    = (b[1] & 0x04) != 0;
+    out->gps_sattelites = b[2];
+
+    out->temp               = (int16_t) ((b[3]  << 8) | b[4])  / 10.0f;
+    out->hum                = (uint16_t)((b[5]  << 8) | b[6])  / 10.0f;
+    out->pole_az_deg        = (uint16_t)((b[7]  << 8) | b[8])  / 10.0f;
+    out->current_az_deg     = (uint16_t)((b[9]  << 8) | b[10]) / 10.0f;
+    out->alt_correction_deg = (int16_t) ((b[11] << 8) | b[12]) / 10.0f;
+    out->current_camera_az  = (uint16_t)((b[13] << 8) | b[14]) / 10.0f;
+    out->current_camera_alt = (uint16_t)((b[15] << 8) | b[16]) / 10.0f;
+    out->battery_mv         = (uint16_t)((b[17] << 8) | b[18]);
+    out->current_ma         = (uint16_t)((b[19] << 8) | b[20]);
+    out->rssi               = (int16_t) ((b[21] << 8) | b[22]);
+
+    return 0;
+}

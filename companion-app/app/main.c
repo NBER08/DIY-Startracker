@@ -1,5 +1,46 @@
 #include "lora.h"
 #include "protocol.h"
+#include "tui.h"
+#include <pthread.h>
+#include <stdlib.h>
+
+
+static void on_command(const char* input) {
+    char cmd[32];
+    float arg1 = 0, arg2 = 0;
+    int n = sscanf(input, "%31s %f %f", cmd, &arg1, &arg2);
+
+    if      (strcmp(cmd, "start")   == 0) { lora_cmd_start();  tui_log("CMD_START sent"); }
+    else if (strcmp(cmd, "stop")    == 0) { lora_cmd_stop();   tui_log("CMD_STOP sent"); }
+    else if (strcmp(cmd, "ping")    == 0) { lora_cmd_ping();   tui_log("Ping sent"); }
+    else if (strcmp(cmd, "shutter") == 0) { lora_cmd_shutter((uint8_t)arg1); tui_log("Shutter %.0fms", arg1); }
+    else if (strcmp(cmd, "slew")    == 0) { lora_cmd_slew_az((uint16_t)(arg1 * 10)); tui_log("Slew to %.1f°", arg1); }
+    else if (strcmp(cmd, "quit")    == 0) { tui_deinit(); exit(0); }
+    else if (strcmp(cmd, "help")    == 0) {
+        tui_log("Commands: start  stop  ping  shutter <ms>  slew <az>  quit");
+    }
+    else {
+        tui_log("Unknown command: %s", cmd);
+    }
+}
+
+// ── receive thread ───────────────────────────────────────────────────────────
+
+static void* recv_thread(void* arg) {
+    (void)arg;
+    LoraStatus status;
+    while (1) {
+        if (lora_recv_status(&status, 5000) == 0) {
+            tui_update_status(&status);
+            tui_log("Status OK — batt %.0fmV  %d sats",
+                    status.battery_mv, status.gps_sattelites);
+        } else {
+            tui_log("No status received (timeout)");
+        }
+    }
+    return NULL;
+}
+
 
 LoraConfig_t cfg = {
     .frequency_hz = "radio set freq 868100000\r\n",
@@ -13,34 +54,16 @@ LoraConfig_t cfg = {
 void main(void) {
     lora_init("/dev/pts/3", &cfg, true);
 
+    tui_init();
+    tui_log("LoRa initialized — port /dev/ttyACM0");
+
+    pthread_t rx;
+    pthread_create(&rx, NULL, recv_thread, NULL);
+
     LoraPacket_t pkt;
 
-    while (1) {
-    // Try to receive a packet (wait up to 5 seconds)
-    if (lora_recv(&pkt, 5000) == 0) {
-        printf("Packet received!\n");
-        printf("  RSSI     : %d dBm\n", pkt.rssi);
-        printf("  SNR      : %d dB\n",  pkt.snr);
-        printf("  Length   : %d bytes\n", pkt.payload_len);
-        printf("  Payload  : ");
-        for (int i = 0; i < pkt.payload_len; i++)
-            printf("%02X ", pkt.payload[i]);
-        printf("\n");
+    tui_run(on_command);   // blocks forever, handles input + redraws
+   
+    tui_deinit();
 
-        // If you want to interpret it as a LoraStatus struct:
-        if (pkt.payload_len == sizeof(LoraStatus)) {
-            LoraStatus status;
-            memcpy(&status, pkt.payload, sizeof(LoraStatus));
-            printf("  Tracking : %s\n",   status.is_tracking ? "yes" : "no");
-            printf("  Battery  : %.0f mV\n", status.battery_mv);
-            printf("  GPS sats : %d\n",   status.gps_sattelites);
-            printf("  RSSI     : %d\n",   status.rssi);
-        }
-
-        } else {
-        // Timeout — no packet in 5s, send a ping
-        printf("No packet received, sending ping...\n");
-        lora_send("PING");
-        }
-    }    
 }
