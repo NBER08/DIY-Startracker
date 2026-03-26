@@ -74,8 +74,10 @@ void lora_init(const char* port, const LoraConfig_t* cfg, bool config) {
 	tty.c_oflag = 0;
 	tty.c_lflag = 0;
 	tty.c_cc[VMIN]  = 0;   // non-blocking read
-	tty.c_cc[VTIME] = 15;  // 1.5 second read timeout (in tenths of a second)
+	tty.c_cc[VTIME] = 30;  // 1.5 second read timeout (in tenths of a second)
 	tcsetattr(fd, TCSANOW, &tty);
+	send_cmd(fd, "sys reset\r\n");
+    sleep(3); // wait for it to reboot
 	send_cmd(fd, "sys reset\r\n");
     if  (config){
 	send_cmd(fd, "mac pause\r\n"); 

@@ -13,8 +13,8 @@ LoraConfig_t cfg = {
 LoraStatus_t status = {
     .is_tracking = false,
     .gps_sattelites = 0,
-    .temp = 0,
-    .hum = 0,
+    .temp = 20,
+    .hum = 10,
     .hum_warning = false,
     .pole_az_deg = 0,
     .current_az_deg = 0,
@@ -28,7 +28,7 @@ LoraStatus_t status = {
 };
 
 int main(int argc, char** argv) {
-    lora_init("/dev/ttyACM0", &cfg, false);
+    lora_init("/dev/ttyACM0", &cfg, true);
     lora_send_status(&status);
     return 0;
 }
