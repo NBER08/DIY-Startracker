@@ -2008,28 +2008,10 @@
 		(uuid "0029a16d-190a-409b-8787-6a5cbc9ce8a1")
 	)
 	(junction
-		(at 83.82 35.56)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "1f3afb02-e3e9-4e3e-9b13-9473369468fe")
-	)
-	(junction
 		(at 34.29 35.56)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4bf525af-6454-4d51-91de-fd91edb1d365")
-	)
-	(junction
-		(at 78.74 35.56)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "518843c0-e5b2-4ec8-b083-68dad4383641")
-	)
-	(junction
-		(at 81.28 35.56)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "53f47ac4-9d18-4070-8e0d-ccc3d3a043b9")
 	)
 	(junction
 		(at 36.83 35.56)
@@ -2086,12 +2068,6 @@
 		(uuid "da60c0fa-0d57-4893-8bbe-0e96dbad19d0")
 	)
 	(junction
-		(at 76.2 35.56)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "defecd72-e495-4ace-ae4d-729f73d7811d")
-	)
-	(junction
 		(at 152.4 45.72)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2116,16 +2092,6 @@
 			(type default)
 		)
 		(uuid "04a468f6-0ae2-4cc7-9b39-de2c55a7bad5")
-	)
-	(wire
-		(pts
-			(xy 83.82 39.37) (xy 83.82 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0a1355b4-2a66-4d67-9860-bf488894a9a3")
 	)
 	(wire
 		(pts
@@ -2166,16 +2132,6 @@
 			(type default)
 		)
 		(uuid "1d04be41-c9dc-4d90-b36e-c7b4b2d67d6b")
-	)
-	(wire
-		(pts
-			(xy 83.82 33.02) (xy 83.82 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "27c375ec-2c14-413a-9d22-d47c8698ce0c")
 	)
 	(wire
 		(pts
@@ -2266,16 +2222,6 @@
 			(type default)
 		)
 		(uuid "3df6c3b9-06e5-436d-88f1-d7b1ed9a3e94")
-	)
-	(wire
-		(pts
-			(xy 78.74 33.02) (xy 78.74 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4613569e-8454-4b57-b6df-b7da01efdf45")
 	)
 	(wire
 		(pts
@@ -2409,16 +2355,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 33.02) (xy 76.2 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8653df0c-e0c7-47c7-8e8b-a8907637e08e")
-	)
-	(wire
-		(pts
 			(xy 54.61 39.37) (xy 54.61 35.56)
 		)
 		(stroke
@@ -2459,16 +2395,6 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 33.02) (xy 81.28 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aec1cfb5-64e2-4ac8-b11f-db724c278d85")
-	)
-	(wire
-		(pts
 			(xy 152.4 43.18) (xy 152.4 45.72)
 		)
 		(stroke
@@ -2486,26 +2412,6 @@
 			(type default)
 		)
 		(uuid "d7e969d4-15fd-4bd2-b0e7-0951d0b6ee92")
-	)
-	(wire
-		(pts
-			(xy 81.28 39.37) (xy 81.28 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e93e511a-5095-484d-8da2-6297c47e4ab8")
-	)
-	(wire
-		(pts
-			(xy 76.2 39.37) (xy 76.2 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ebba5716-ba55-4487-9b61-1912f4241354")
 	)
 	(wire
 		(pts
@@ -2537,16 +2443,6 @@
 		)
 		(uuid "f4bfc211-cefa-4c86-98fa-19d0ca67d0cb")
 	)
-	(wire
-		(pts
-			(xy 78.74 39.37) (xy 78.74 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f7967f39-3875-4e5e-8a07-647c54256070")
-	)
 	(global_label "BATT"
 		(shape input)
 		(at 185.42 35.56 0)
@@ -2568,17 +2464,6 @@
 				(hide yes)
 			)
 		)
-	)
-	(hierarchical_label "M3_B2"
-		(shape input)
-		(at 83.82 39.37 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "04757e64-4254-4f77-8a38-fef56e890ad5")
 	)
 	(hierarchical_label "M2_A1"
 		(shape input)
@@ -2613,17 +2498,6 @@
 		)
 		(uuid "3b8194f7-cf9c-4e3f-93b3-852fbeb86782")
 	)
-	(hierarchical_label "M3_A2"
-		(shape input)
-		(at 81.28 39.37 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "3da61a92-5200-41ae-b596-41c870624a4f")
-	)
 	(hierarchical_label "M1_B+"
 		(shape input)
 		(at 31.75 39.37 270)
@@ -2634,17 +2508,6 @@
 			(justify right)
 		)
 		(uuid "4078969b-1cec-4e34-bb1b-c83688f3c309")
-	)
-	(hierarchical_label "M3_A1"
-		(shape input)
-		(at 76.2 39.37 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "82c2f39c-24d3-477c-9f8d-3e1b1aaf23bb")
 	)
 	(hierarchical_label "M1_A-"
 		(shape input)
@@ -2667,17 +2530,6 @@
 			(justify right)
 		)
 		(uuid "b989710d-bbc5-4688-8774-c71ca8e9ee66")
-	)
-	(hierarchical_label "M3_B1"
-		(shape input)
-		(at 78.74 39.37 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "ba4466b5-9da9-4056-ab60-9bb55be4c057")
 	)
 	(hierarchical_label "M2_B2"
 		(shape input)
@@ -2882,7 +2734,7 @@
 			(uuid "6e7580b0-fdb9-4ca3-a280-c4a0457f4919")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "C54")
 					(unit 1)
@@ -3111,83 +2963,9 @@
 			(uuid "4a857e60-acac-45ac-a70c-a08152ee4d5e")
 		)
 		(instances
-			(project ""
-				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
-					(reference "C55")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x04_Socket")
-		(at 78.74 27.94 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4bdaf393-08dc-4622-a197-05478a175459")
-		(property "Reference" "J5"
-			(at 80.01 22.86 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Motor3"
-			(at 80.01 25.4 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical"
-			(at 78.74 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 78.74 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 78.74 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "028af2b5-bcd7-4a4d-ba6a-f3dbef5ce935")
-		)
-		(pin "4"
-			(uuid "91daca61-03f8-4cdc-beb5-8b1581429560")
-		)
-		(pin "3"
-			(uuid "0bc6f87a-ce3d-4ecb-8662-5896eaa31c00")
-		)
-		(pin "2"
-			(uuid "05f64490-fbff-4fef-be52-0628b37b5180")
-		)
-		(instances
 			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
-					(reference "J5")
+					(reference "C55")
 					(unit 1)
 				)
 			)
@@ -3252,7 +3030,7 @@
 			(uuid "ffcf4655-2ac6-4042-8d0b-c05083e2e7c8")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "C48")
 					(unit 1)
@@ -3322,7 +3100,7 @@
 			(uuid "6bb6cb49-44e4-43dd-89ca-df3110b28c02")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "R25")
 					(unit 1)
@@ -3463,7 +3241,7 @@
 			(uuid "4579c5da-4552-4369-944a-729b45e7a6e4")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "#PWR0103")
 					(unit 1)
@@ -3691,7 +3469,7 @@
 			(uuid "c9d0c9fb-41a3-4fde-8fe0-0b34474248ed")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "Q1")
 					(unit 1)
@@ -3921,7 +3699,7 @@
 			(uuid "12c9ea9d-19ec-4d38-bd21-820d87a152e2")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "J7")
 					(unit 1)
@@ -4127,7 +3905,7 @@
 			(uuid "0917a3d1-cb51-4726-adc4-1a14f3c53b4a")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "D2")
 					(unit 1)
@@ -4277,141 +4055,6 @@
 		)
 	)
 	(symbol
-		(lib_id "saját:C_Super_Small")
-		(at 77.47 35.56 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "d34dc717-b3ba-4d51-a46f-af97d3be0994")
-		(property "Reference" "C52"
-			(at 72.136 35.814 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100n"
-			(at 74.676 35.814 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 77.47 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 77.47 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 69.088 33.528 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "36f92f40-cfcf-4197-9e46-183d94926471")
-		)
-		(pin "2"
-			(uuid "b914ce3f-f443-4130-8aee-dba63f7fdbbe")
-		)
-		(instances
-			(project "Startracker"
-				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
-					(reference "C52")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "saját:C_Super_Small")
-		(at 82.55 35.56 270)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "f0707488-ea7c-4dd9-a18c-2bbc66fc20ed")
-		(property "Reference" "C53"
-			(at 87.884 35.814 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100n"
-			(at 85.344 35.814 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 82.55 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 82.55 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 90.932 33.528 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3f524bb2-a435-4e3b-a762-7de461e68998")
-		)
-		(pin "2"
-			(uuid "9ada4f7e-21f1-415e-ac85-6662a278499d")
-		)
-		(instances
-			(project "Startracker"
-				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
-					(reference "C53")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 68.58 86.36 0)
 		(unit 1)
@@ -4541,7 +4184,7 @@
 			(uuid "d861812e-c5d6-43c0-9830-bbd4c30aa6d7")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/1d933153-cc32-40aa-bf24-5d7da12d1a94"
 					(reference "J6")
 					(unit 1)

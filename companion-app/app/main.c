@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+//To compile using gcc: gcc main.c lora.c tui.c -o test -lncursesw -lpthread -lm
+
 
 static void on_command(const char* input) {
     char cmd[32];
@@ -32,7 +34,7 @@ static void* recv_thread(void* arg) {
     while (1) {
         if (lora_recv_status(&status, 5000) == 0) {
             tui_update_status(&status);
-            tui_log("Status OK — batt %.0fmV  %d sats",
+            tui_log("Status OK | batt %.0fmV  %d sats",
                     status.battery_mv, status.gps_sattelites);
         } else {
             tui_log("No status received (timeout)");

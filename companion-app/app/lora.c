@@ -52,7 +52,7 @@ static void read_response(int fd) {
         pos++;
         if (pos >= 2 && buf[pos-2] == '\r' && buf[pos-1] == '\n') {
             buf[pos] = '\0';
-            printf("< %s", buf);
+            //printf("< %s", buf);
             pos = 0;
         }
     }
@@ -62,7 +62,7 @@ static int send_cmd(int fd, const char* value) {
     char buf[128];
     int len = snprintf(buf, sizeof(buf), value);
     if (write(fd, buf, len) < 0) { perror("write"); return -1; }
-    printf("\nSent: %s", buf);
+    //printf("\nSent: %s", buf);
 	read_response(fd);
     return 0;
 }
@@ -131,12 +131,13 @@ int lora_recv(LoraPacket_t* out, uint32_t timeout_ms) {
         int len = read_line(fd, line, sizeof(line), timeout_ms);
         if (len < 0) return -1;   // timed out
 
-        printf("< %s\n", line);
+        // printf("< %s\n", line);
 
         // Module outputs "radio_rx  <hexdata>"  (two spaces after radio_rx)
-        if (strncmp(line, "radio_rx  ", 10) != 0) continue;
+        if (strncmp(line, "radio_rx", 8) != 0) continue;
+            char* hex = line + 8;
+        while (*hex == ' ') hex++;  
 
-        char* hex = line + 10;
         int hex_len = strlen(hex);
         if (hex_len < 2 || hex_len % 2 != 0) return -1;
 
@@ -191,7 +192,7 @@ void lora_send_cmd(LoraCmd cmd, uint8_t param_hi, uint8_t param_lo) {
     send_cmd(fd, txmsg);
     send_cmd(fd, "radio rx 0\r\n");
 
-    printf("TX cmd=0x%02X param_hi=%d param_lo=%d\n", cmd, param_hi, param_lo);
+    //printf("TX cmd=0x%02X param_hi=%d param_lo=%d\n", cmd, param_hi, param_lo);
 }
 
 // Convenience wrappers

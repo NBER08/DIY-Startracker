@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.6,
-          "height": 1.5,
-          "width": 1.05
+          "drill": 1.2,
+          "height": 2.0,
+          "width": 2.0
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -65,27 +65,23 @@
       ],
       "drc_exclusions": [
         [
-          "lib_footprint_mismatch|148264382|131839231|75ec9f9a-3185-42ea-a1a0-d76235db41c6|00000000-0000-0000-0000-000000000000",
+          "lib_footprint_mismatch|168838382|126303131|75ec9f9a-3185-42ea-a1a0-d76235db41c6|00000000-0000-0000-0000-000000000000",
           ""
         ],
         [
-          "lib_footprint_mismatch|164130400|49276000|2bc4f84f-ff7f-4f1b-98b0-feb340c42404|00000000-0000-0000-0000-000000000000",
+          "lib_footprint_mismatch|182266000|62389458|2bc4f84f-ff7f-4f1b-98b0-feb340c42404|00000000-0000-0000-0000-000000000000",
+          "Elongated pads"
+        ],
+        [
+          "lib_footprint_mismatch|182304400|54998058|49209943-2c5b-4ab2-8d9d-d80278c7222d|00000000-0000-0000-0000-000000000000",
+          "Elongated pads"
+        ],
+        [
+          "silk_edge_clearance|132409400|49090858|1fcf0962-4738-4ac4-8db7-14c86c0c9bc7|a32a8929-72b0-439e-bd86-2ce53ab7a019",
           ""
         ],
         [
-          "lib_footprint_mismatch|164168800|41884600|49209943-2c5b-4ab2-8d9d-d80278c7222d|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_edge_clearance|114273800|35977400|1fcf0962-4738-4ac4-8db7-14c86c0c9bc7|a32a8929-72b0-439e-bd86-2ce53ab7a019",
-          ""
-        ],
-        [
-          "silk_edge_clearance|132673800|35977400|1fcf0962-4738-4ac4-8db7-14c86c0c9bc7|79e715f6-bcce-4b32-a1d5-79a73a30d93a",
-          ""
-        ],
-        [
-          "track_dangling|98809854|111745000|a209b7f4-1cc2-4067-a40f-12efb4e74a91|00000000-0000-0000-0000-000000000000",
+          "silk_edge_clearance|150809400|49090858|1fcf0962-4738-4ac4-8db7-14c86c0c9bc7|79e715f6-bcce-4b32-a1d5-79a73a30d93a",
           ""
         ]
       ],
@@ -124,7 +120,7 @@
         "mirrored_text_on_front_layer": "warning",
         "missing_courtyard": "ignore",
         "missing_footprint": "warning",
-        "net_conflict": "warning",
+        "net_conflict": "ignore",
         "nonmirrored_text_on_back_layer": "warning",
         "npth_inside_courtyard": "ignore",
         "padstack": "warning",

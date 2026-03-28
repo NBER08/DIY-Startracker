@@ -4005,7 +4005,7 @@
 			(uuid "9ec3cfc3-7f21-4de7-87bd-d3f4dba917f9")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "C41")
 					(unit 1)
@@ -4167,7 +4167,7 @@
 			(uuid "068319c2-d7ba-4733-9e33-3535516f58df")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "Y2")
 					(unit 1)
@@ -4306,7 +4306,7 @@
 			(uuid "851fca02-b3e6-41e1-816a-a6fddcbb912e")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "U10")
 					(unit 1)
@@ -4374,7 +4374,7 @@
 			(uuid "55fd1b81-630e-49fd-a59a-95a5a9471d52")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "R23")
 					(unit 1)
@@ -4444,7 +4444,7 @@
 			(uuid "7250909f-cebc-4898-be45-ef6e64c3f9fd")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "C42")
 					(unit 1)
@@ -4714,7 +4714,7 @@
 			(uuid "2da6a157-c2bf-4e73-85ac-7f4c629edb5d")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "#PWR087")
 					(unit 1)
@@ -4866,7 +4866,7 @@
 			(uuid "2235e406-61bc-45c3-8bb9-76fa679256ac")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "U11")
 					(unit 1)
@@ -5000,7 +5000,7 @@
 			(uuid "da3a7395-4b71-4b6a-a557-8c089d935123")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "#PWR096")
 					(unit 1)
@@ -5227,7 +5227,7 @@
 			(uuid "fa5e536c-3fb5-4311-aa24-1c5832eae759")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "FL1")
 					(unit 1)
@@ -5497,7 +5497,7 @@
 			(uuid "83e22f79-ac5b-4d1b-affd-70240f5d7f94")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "R22")
 					(unit 1)
@@ -5903,7 +5903,7 @@
 			(uuid "3d8650af-ce81-4869-a06f-497de22b1db3")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "L3")
 					(unit 1)
@@ -6107,7 +6107,7 @@
 			(uuid "e260943f-7556-4b6b-8ecc-0007bd8c3197")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "L2")
 					(unit 1)
@@ -6244,7 +6244,7 @@
 			(uuid "bfe4b5ff-430e-40e6-b9be-3ddf84501eb4")
 		)
 		(instances
-			(project ""
+			(project "Startracker"
 				(path "/45ea479c-a8ef-4c14-88b0-391ede4fd156/efc52d26-5e7f-40f5-a09a-58b8b5321559"
 					(reference "AE1")
 					(unit 1)

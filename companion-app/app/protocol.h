@@ -24,8 +24,8 @@ typedef struct {
 
     int gps_sattelites;
 
-    int temp;
-    int hum;
+    float temp;
+    float hum;
     bool hum_warning;
 
     float pole_az_deg;
