@@ -11,24 +11,24 @@ LoraConfig_t cfg = {
 };
 
 LoraStatus_t status = {
-    .is_tracking = false,
-    .gps_sattelites = 0,
-    .temp = 20,
-    .hum = 10,
-    .hum_warning = false,
-    .pole_az_deg = 0,
-    .current_az_deg = 0,
-    .alt_correction_deg = 0,
-    .current_camera_az = 0,
-    .current_camera_alt = 0,
-    .is_on_target = false,
-    .battery_mv = 0,
-    .current_ma = 0,
+    .is_tracking = true,
+    .gps_sattelites = 6,
+    .temp = 212,
+    .hum = 101,
+    .hum_warning = true,
+    .pole_az_deg = 20.1,
+    .current_az_deg = 34.2,
+    .alt_correction_deg = 22.8,
+    .current_camera_az = 12.8,
+    .current_camera_alt = 29.1,
+    .is_on_target = true,
+    .battery_mv = 100.1,
+    .current_ma = 100.1,
     .rssi = 1
 };
 
 int main(int argc, char** argv) {
-    lora_init("/dev/ttyACM0", &cfg, true);
+    lora_init("/dev/ttyACM0", &cfg, false);
     lora_send_status(&status);
     return 0;
 }
